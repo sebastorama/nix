@@ -278,6 +278,22 @@ in
     '';
   };
 
+  programs.bash = {
+    enable = true;
+    enableCompletion = true;
+    initExtra = ''
+      # Source home-manager session variables
+      if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
+        . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
+      fi
+
+      # Auto-start zsh if we're in an interactive shell
+      if [[ $- == *i* ]] && command -v zsh &> /dev/null; then
+        exec zsh
+      fi
+    '';
+  };
+
   programs.zoxide = {
     enable = true;
     enableZshIntegration = true;
@@ -285,6 +301,12 @@ in
 
   programs.zsh = {
     enable = true;
+
+    envExtra = ''
+      export LANG=en_US.UTF-8
+      export LC_ALL=en_US.UTF-8
+      export LC_CTYPE=en_US.UTF-8
+    '';
 
     oh-my-zsh = {
       enable = true;
