@@ -61,8 +61,11 @@
 
     # Home Manager configurations for Linux
     homeConfigurations = {
-      "sebastorama@linux" = mkHomeConfiguration "linux" "x86_64-linux";
+      "sebastorama@wsl" = mkHomeConfiguration "linux" "x86_64-linux";
     };
+
+    # Expose activation packages for easier building
+    packages.x86_64-linux.default = self.homeConfigurations."sebastorama@wsl".activationPackage;
 
     # Expose the package sets for convenience
     darwinPackages = self.darwinConfigurations."14m3".pkgs;

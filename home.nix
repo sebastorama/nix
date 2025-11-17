@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }@inputs:
+{ config, lib, pkgs, system, ... }@inputs:
 
+let
+  # Detect home directory based on system
+  homeDir = if pkgs.stdenv.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
+  dotfilesPath = if pkgs.stdenv.isDarwin then "${config.xdg.configHome}/nix/dotfiles" else "${homeDir}/nix/dotfiles";
+in
 {
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "sebastorama";
-  home.homeDirectory = "/Users/sebastorama";
+  home.homeDirectory = homeDir;
 
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
@@ -27,6 +32,7 @@
     cargo
     crush
     devcontainer
+    dotenv-cli
     fd
     freerdp3
     fzf
@@ -91,21 +97,21 @@
     # ".screenrc".source = dotfiles/screenrc;
 
     ".config/kitty/kitty.conf".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/nix-darwin/dotfiles/kitty.conf";
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/kitty.conf";
 
     ".config/ghostty/config".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/nix-darwin/dotfiles/ghostty_conf";
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/ghostty_conf";
 
     ".config/nvim/".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/nix-darwin/dotfiles/nvim";
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
 
     ".aider.model.settings.yml".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/nix-darwin/dotfiles/aider.model.settings.yml";
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/aider.model.settings.yml";
 
     ".npmrc".source = dotfiles/npmrc;
 
     ".config/crush/crush.json".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.xdg.configHome}/nix-darwin/dotfiles/crush.json";
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
     ".gitignore_global".text = ''
       # Aider files
@@ -149,6 +155,8 @@
   home.sessionVariables = {
     EDITOR = "nvim";
     LC_CTYPE = "en_US.UTF-8";
+    LC_ALL="en_US.UTF-8";
+    LANG="en_US.UTF-8";
   };
 
   programs.git = {
@@ -277,6 +285,7 @@
 
   programs.zsh = {
     enable = true;
+
     oh-my-zsh = {
       enable = true;
       theme = "fino";
