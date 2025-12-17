@@ -36,6 +36,7 @@ in
     fd
     freerdp3
     fzf
+    gawk
     gcc
     gh
     gum
@@ -47,11 +48,12 @@ in
     mtr
     neovim
     nil
+    nixfmt
     nodejs_24
     pgformatter
     pipx
     pnpm
-    postgresql_16
+    postgresql_18
     python3
     ripgrep
     (ruby_3_3.withPackages (rp: with rp; [
