@@ -30,9 +30,11 @@ in
     btop
     bun
     cargo
+    copilot-language-server
     crush
     devcontainer
     dotenv-cli
+    eslint_d
     fd
     freerdp3
     fzf
@@ -71,6 +73,7 @@ in
     typescript-language-server
     uv
     wget
+    xmlstarlet
     yt-dlp
 
     # Custom scripts
