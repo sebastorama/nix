@@ -36,7 +36,7 @@ in
     dotenv-cli
     eslint_d
     fd
-    freerdp3
+    freerdp
     fzf
     gawk
     gcc
@@ -166,10 +166,10 @@ in
 
   programs.git = {
    enable = true;
-   userEmail = "sebastorama@gmail.com";
-   userName = "Sebastião Giacheto Ferreira Júnior";
+   settings = {
+     user.email = "sebastorama@gmail.com";
+     user.name = "Sebastião Giacheto Ferreira Júnior";
 
-   extraConfig = {
      init.defaultBranch = "main";
      core.editor = "nvim";
      core.excludesfile = "~/.gitignore_global";
@@ -177,30 +177,31 @@ in
      mergetool."nvimdiff".cmd = "nvim -d \"$LOCAL\" \"$MERGED\" \"$BASE\" \"$REMOTE\" -c \"wincmd w\" -c \"wincmd J\"";
      diff.tool = "nvimdiff";
      difftool."nvimdiff".cmd = "nvim -d \"$LOCAL\" \"$REMOTE\"";
-   };
 
-   aliases = {
-     st = "status -s";
-     ci = "commit";
-     co = "checkout";
-     dc = "diff --cached";
-     df = "diff";
-     lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset' --abbrev-commit";
-   };
-
-   delta = {
-     enable = true;
-     options = {
-       syntax-theme = "Nord";  # Dark theme similar to Tokyo Night
-       line-numbers = true;
-       side-by-side = false;
-       navigate = true;
-       hyperlinks = true;
-       file-style = "bold yellow ul";
-       file-decoration-style = "none";
-       hunk-header-style = "file line-number syntax";
+     alias = {
+       st = "status -s";
+       ci = "commit";
+       co = "checkout";
+       dc = "diff --cached";
+       df = "diff";
+       lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset' --abbrev-commit";
      };
    };
+  };
+
+  programs.delta = {
+    enable = true;
+    enableGitIntegration = true;
+    options = {
+      syntax-theme = "Nord";  # Dark theme similar to Tokyo Night
+      line-numbers = true;
+      side-by-side = false;
+      navigate = true;
+      hyperlinks = true;
+      file-style = "bold yellow ul";
+      file-decoration-style = "none";
+      hunk-header-style = "file line-number syntax";
+    };
   };
 
   programs.ssh = {
