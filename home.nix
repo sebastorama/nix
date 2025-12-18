@@ -1,4 +1,4 @@
-{ config, lib, pkgs, system, ... }@inputs:
+{ config, _lib, pkgs, _system, ... }@_inputs:
 
 let
   # Detect home directory based on system
@@ -72,6 +72,7 @@ in
     tree-sitter
     typescript-language-server
     uv
+    vscode-langservers-extracted
     wget
     xmlstarlet
     yt-dlp
