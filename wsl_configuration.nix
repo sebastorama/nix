@@ -10,6 +10,13 @@
     enable = true;
     defaultUser = "sebastorama";
     startMenuLaunchers = true;
+    wrapBinSh = true;
+
+    # workaround for cursor remote install
+    extraBin = [{
+      name = "bash";
+      src = config.wsl.binShExe;
+    }];
   };
 
   # Boot loader configuration for UEFI (disabled for WSL)

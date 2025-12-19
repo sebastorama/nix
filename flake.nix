@@ -55,10 +55,10 @@
       };
     };
 
-    mkNixosSystem = hostname: system: nixpkgs.lib.nixosSystem {
+    mkNixosWslSystem = hostname: system: nixpkgs.lib.nixosSystem {
       inherit system;
       modules = [
-        ./configuration.nix
+        ./wsl_configuration.nix
         nixos-wsl.nixosModules.default
       ];
       specialArgs = {
@@ -76,8 +76,7 @@
 
     # NixOS configurations
     nixosConfigurations = {
-      "nixos" = mkNixosSystem "nixos" "x86_64-linux";
-      "wsl" = mkNixosSystem "wsl" "x86_64-linux";
+      "wsl" = mkNixosWslSystem "wsl" "x86_64-linux";
     };
 
     # Home Manager configurations for non-NixOS Linux (standalone WSL distros)

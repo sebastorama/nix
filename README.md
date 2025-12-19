@@ -8,3 +8,5 @@
 6. Run `nix run nix-darwin -- switch --flake ~/.config/nix-darwin#14m1`
 7. Make some coffee (it'll take a while)
 8. Profit
+
+## Commands
