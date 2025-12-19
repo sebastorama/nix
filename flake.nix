@@ -11,9 +11,12 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
+
+    nixos-wsl.url = "github:nix-community/nixos-wsl";
+    nixos-wsl.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nix-darwin, nixpkgs, home-manager, ... }@inputs:
+  outputs = { self, nix-darwin, nixpkgs, home-manager, nixos-wsl, ... }@inputs:
   let
     mkPkgs = system: import nixpkgs {
       inherit system;
@@ -51,6 +54,18 @@
         system = system;
       };
     };
+
+    mkNixosSystem = hostname: system: nixpkgs.lib.nixosSystem {
+      inherit system;
+      modules = [
+        ./configuration.nix
+        nixos-wsl.nixosModules.default
+      ];
+      specialArgs = {
+        inherit inputs hostname self;
+        pkgs = mkPkgs system;
+      };
+    };
   in
   {
     # Darwin configurations
@@ -59,7 +74,13 @@
       "16m3" = mkDarwinSystem "16m3" "aarch64-darwin";
     };
 
-    # Home Manager configurations for Linux
+    # NixOS configurations
+    nixosConfigurations = {
+      "nixos" = mkNixosSystem "nixos" "x86_64-linux";
+      "wsl" = mkNixosSystem "wsl" "x86_64-linux";
+    };
+
+    # Home Manager configurations for non-NixOS Linux (standalone WSL distros)
     homeConfigurations = {
       "sebastorama@wsl" = mkHomeConfiguration "linux" "x86_64-linux";
     };

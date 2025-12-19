@@ -30,6 +30,7 @@ in
     btop
     bun
     cargo
+    claude-code
     copilot-language-server
     crush
     devcontainer
@@ -48,7 +49,6 @@ in
     libxml2
     lsd
     mtr
-    neovim
     nil
     nixfmt
     nodejs_24
@@ -164,6 +164,8 @@ in
     LC_ALL="en_US.UTF-8";
     LANG="en_US.UTF-8";
   };
+
+  programs.neovim.enable = true;
 
   programs.git = {
    enable = true;
