@@ -42,6 +42,7 @@ in
     gawk
     gcc
     gh
+    google-chrome
     gum
     imagemagick
     jq
