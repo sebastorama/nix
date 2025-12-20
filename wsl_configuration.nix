@@ -11,6 +11,7 @@
     defaultUser = "sebastorama";
     startMenuLaunchers = true;
     wrapBinSh = true;
+    docker-desktop.enable = true;
 
     # workaround for cursor remote install
     extraBin = [{
