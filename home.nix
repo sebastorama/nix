@@ -3,7 +3,7 @@
 let
   # Detect home directory based on system
   homeDir = if pkgs.stdenv.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
-  dotfilesPath = if pkgs.stdenv.isDarwin then "${config.xdg.configHome}/nix/dotfiles" else "${homeDir}/nix/dotfiles";
+  dotfilesPath = "${homeDir}/nix/dotfiles";
 in
 {
   # Home Manager needs a bit of information about you and the paths it should
