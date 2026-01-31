@@ -39,6 +39,7 @@
       "google-chrome"
       "google-chrome@canary"
       "google-earth-pro"
+      "handbrake"
       "iina"
       "iterm2"
       "jetbrains-toolbox"
