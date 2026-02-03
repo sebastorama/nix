@@ -87,11 +87,12 @@
     ];
 
     brews = [
-      "qmk/qmk/qmk"
       "findutils"
       "graphviz"
       "haskell-stack"
+      "qmk/qmk/qmk"
       "sevenzip"
+      "terminal-notifier"
     ];
 
     onActivation.autoUpdate = true;
