@@ -42,7 +42,9 @@ in
     gawk
     gcc
     gh
+  ] ++ pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
     google-chrome
+  ] ++ [
     gum
     imagemagick
     jq
