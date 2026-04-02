@@ -12,6 +12,7 @@
     enable = true;
 
     taps = [
+      "dopplerhq/cli"
       "qmk/qmk"
     ];
 
@@ -28,6 +29,7 @@
       "bambu-studio"
       "brave-browser"
       "claude"
+      "cmux"
       "cursor"
       "devpod"
       "discord"
@@ -39,7 +41,7 @@
       "google-chrome"
       "google-chrome@canary"
       "google-earth-pro"
-      "handbrake"
+      "handbrake-app"
       "iina"
       "iterm2"
       "jetbrains-toolbox"
@@ -87,9 +89,12 @@
     ];
 
     brews = [
+      "dopplerhq/cli/doppler"
       "findutils"
+      "gnupg"
       "graphviz"
       "haskell-stack"
+      "openjdk"
       "qmk/qmk/qmk"
       "sevenzip"
       "terminal-notifier"

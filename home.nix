@@ -25,7 +25,6 @@ in
 
   home.packages = with pkgs; [
     act
-    aider-chat
     bc
     btop
     bun
@@ -114,19 +113,13 @@ in
     ".config/nvim/".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
 
-    ".aider.model.settings.yml".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/aider.model.settings.yml";
-
     ".npmrc".source = dotfiles/npmrc;
 
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
     ".gitignore_global".text = ''
-      # Aider files
-      .aider*
       .claude*
-      aider.log
       .vscode
       .serena
     '';
