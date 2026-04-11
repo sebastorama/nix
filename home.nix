@@ -328,6 +328,8 @@ in
     shellAliases = {
       ta = "tmux new-session -As";
       ls = "lsd";
+      wmm = "nvim '${homeDir}/obsidian/Main/Working Memory.md'";
+      ccc = "claude --dangerously-skip-permissions";
     };
 
     autosuggestion = {
