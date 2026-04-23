@@ -117,6 +117,12 @@ in
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
+    ".local/scripts/tmux-agent-state".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/tmux-agent-state";
+
+    ".local/scripts/ll".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/ll";
+
     ".gitignore_global".text = ''
       .claude*
       .vscode
@@ -257,7 +263,7 @@ in
 
       bind-key -r 9 resize-pane -L 10
       bind-key -r 0 resize-pane -R 10
-      bind-key F3 resize-pane -L 50
+      bind-key -n F3 choose-tree -Zw
       bind-key F4 resize-pane -R 50
 
 

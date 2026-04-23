@@ -1,0 +1,59 @@
+#!/usr/bin/env bash
+# Update tmux window/session emoji prefix to reflect an agent's state.
+# Usage: tmux-agent-state.sh <state-emoji>
+#   state-emoji: 🟡 (working) | 🔴 (needs input) | 🟠 (waiting) | 🟢 (done) | "" (clear)
+#
+# Window: prefixed with the given emoji (replacing any existing state prefix).
+# Session: aggregate across all agent windows — 🔴 if any window needs input,
+#          else 🟡 if any window is working, else 🟠 if any window is waiting,
+#          else ✅ if any window is done,
+#          else clear (no prefix; session has no agent windows at all).
+#          Session never shows 🟢 directly — done is rolled up as ✅.
+#
+# Agent-agnostic: any agent (Claude Code, Codex, Aider, etc.) can call this from
+# its own hook/event mechanism. Original window and session names are preserved;
+# only the leading state emoji is touched.
+
+[ -z "$TMUX" ] && exit 0
+[ -z "${TMUX_PANE:-}" ] && exit 0
+
+new_emoji="${1:-}"
+
+strip_emoji() {
+  printf '%s' "$1" | sed -E 's/^(🔴|🟡|🟠|🟢|✅)[[:space:]]*//'
+}
+
+target_pane="$TMUX_PANE"
+window_id=$(tmux display-message -p -t "$target_pane" '#{window_id}' 2>/dev/null) || exit 0
+session_id=$(tmux display-message -p -t "$target_pane" '#{session_id}' 2>/dev/null) || exit 0
+
+current_window=$(tmux display-message -p -t "$target_pane" '#W' 2>/dev/null) || exit 0
+window_base=$(strip_emoji "$current_window")
+if [ -n "$new_emoji" ]; then
+  new_window="${new_emoji} ${window_base}"
+else
+  new_window="$window_base"
+fi
+tmux rename-window -t "$window_id" -- "$new_window" 2>/dev/null || true
+
+current_session=$(tmux display-message -p -t "$target_pane" '#S' 2>/dev/null) || exit 0
+session_base=$(strip_emoji "$current_session")
+
+session_emoji=""
+windows=$(tmux list-windows -t "$session_id" -F '#W' 2>/dev/null) || exit 0
+if printf '%s\n' "$windows" | grep -q '^🔴'; then
+  session_emoji="🔴"
+elif printf '%s\n' "$windows" | grep -q '^🟡'; then
+  session_emoji="🟡"
+elif printf '%s\n' "$windows" | grep -q '^🟠'; then
+  session_emoji="🟠"
+elif printf '%s\n' "$windows" | grep -q '^🟢'; then
+  session_emoji="✅"
+fi
+
+if [ -n "$session_emoji" ]; then
+  new_session="${session_emoji} ${session_base}"
+else
+  new_session="$session_base"
+fi
+tmux rename-session -t "$session_id" -- "$new_session" 2>/dev/null || true

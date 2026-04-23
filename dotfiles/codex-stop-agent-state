@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Codex Stop hook: mark tmux green unless the final assistant message is
+# waiting for user input, in which case mark it red.
+
+set -euo pipefail
+
+state_script="${CODEX_AGENT_STATE_SCRIPT:-/Users/sebastorama/nix/dotfiles/tmux-agent-state}"
+payload="$(cat || true)"
+last_message=""
+
+if command -v jq >/dev/null 2>&1; then
+  last_message="$(printf '%s' "$payload" | jq -r '.last_assistant_message // .last_agent_message // ""' 2>/dev/null || true)"
+fi
+
+message_without_code="$(printf '%s' "$last_message" | awk '
+  /^[[:space:]]*```/ { in_code = !in_code; next }
+  !in_code { print }
+')"
+
+# Only inspect the final two paragraphs. Explanations earlier in an answer can
+# mention prompts, approval, or waiting without actually asking the user.
+prompt_scope="$(printf '%s' "$message_without_code" | awk '
+  NF {
+    paragraph = paragraph (paragraph ? "\n" : "") $0
+    next
+  }
+  paragraph {
+    previous = last
+    last = paragraph
+    paragraph = ""
+  }
+  END {
+    if (paragraph) {
+      previous = last
+      last = paragraph
+    }
+    if (previous) {
+      print previous "\n" last
+    } else {
+      print last
+    }
+  }
+')"
+prompt_scope_one_line="$(printf '%s' "$prompt_scope" | tr '\n' ' ' | sed -E 's/[[:space:]]+/ /g')"
+
+needs_input=0
+if [ -n "$prompt_scope_one_line" ]; then
+  direct_request_re='(^|[.!?][[:space:]]+|[-*][[:space:]]+)(do you want|would you like|should i|can you|could you|please (approve|confirm|provide|choose|select|send|share)|confirm (that|whether|if)|choose one|select one|which [^.!?]* should i|what [^.!?]* should i|how would you like|let me know (which|what|whether|if|when|how)|tell me (which|what|whether|if|when|how)|i need (your )?(approval|confirmation|choice|input)|need your input|waiting for your|approve (the|this|that|these|command|request|action))'
+  if printf '%s' "$prompt_scope_one_line" | grep -Eiq "$direct_request_re"; then
+    needs_input=1
+  elif printf '%s\n' "$prompt_scope" | awk '
+    {
+      line = $0
+      sub(/[[:space:]]+$/, "", line)
+      while (line ~ /[]")]+$/) {
+        sub(/[]")]+$/, "", line)
+        sub(/[[:space:]]+$/, "", line)
+      }
+      if (line ~ /\?$/) {
+        found = 1
+      }
+    }
+    END { exit found ? 0 : 1 }
+  '; then
+    needs_input=1
+  fi
+fi
+
+if [ "$needs_input" -eq 1 ]; then
+  exec "$state_script" '🔴'
+fi
+
+exec "$state_script" '🟢'

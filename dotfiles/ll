@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# Clear this tmux window's agent state icon, update the session aggregate, then
+# clear the visible terminal.
+
+if [ -n "$TMUX" ]; then
+  /Users/sebastorama/nix/dotfiles/tmux-agent-state
+fi
+
+clear
