@@ -120,8 +120,8 @@ in
     ".local/scripts/tmux-agent-state".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/tmux-agent-state";
 
-    ".local/scripts/ll".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/ll";
+    ".local/scripts/lll".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/lll";
 
     ".gitignore_global".text = ''
       .claude*
