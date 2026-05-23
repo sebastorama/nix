@@ -27,6 +27,10 @@
             doCheck = false;
             doInstallCheck = false;
           });
+          pipx = prev.pipx.overrideAttrs (_: {
+            doCheck = false;
+            doInstallCheck = false;
+          });
         })
       ];
       config.allowUnfree = true;

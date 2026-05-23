@@ -213,9 +213,9 @@ in
     enable = true;
     # Disable deprecated defaults and set ours explicitly
     enableDefaultConfig = false;
-    matchBlocks = {
+    settings = {
       "*" = {
-        addKeysToAgent = "yes";
+        AddKeysToAgent = "yes";
       };
     };
   };
