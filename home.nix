@@ -167,6 +167,7 @@ in
   };
 
   programs.neovim.enable = true;
+  programs.neovim.sideloadInitLua = true;
 
   programs.git = {
    enable = true;

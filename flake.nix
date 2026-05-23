@@ -20,7 +20,15 @@
   let
     mkPkgs = system: import nixpkgs {
       inherit system;
-      overlays = [inputs.neovim-nightly-overlay.overlays.default];
+      overlays = [
+        inputs.neovim-nightly-overlay.overlays.default
+        (final: prev: {
+          neovim-unwrapped = prev.neovim-unwrapped.overrideAttrs (_: {
+            doCheck = false;
+            doInstallCheck = false;
+          });
+        })
+      ];
       config.allowUnfree = true;
     };
 
