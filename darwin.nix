@@ -46,7 +46,6 @@
       "iterm2"
       "jetbrains-toolbox"
       "karabiner-elements"
-      "kdenlive"
       "keymapp"
       "kicad"
       "kitty"
@@ -89,6 +88,7 @@
     ];
 
     brews = [
+      "cloudflared"
       "dopplerhq/cli/doppler"
       "findutils"
       "gnupg"
