@@ -37,6 +37,7 @@ in
     claude-code
     copilot-language-server
     devcontainer
+    doppler
     dotenv-cli
     eslint_d
     fd
