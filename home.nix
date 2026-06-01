@@ -218,6 +218,10 @@ in
       "*" = {
         AddKeysToAgent = "yes";
       };
+      "14m3" = {
+        hostname = "100.92.56.95";
+        user = "sebastorama";
+      };
     };
   };
 
