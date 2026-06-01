@@ -6,6 +6,10 @@ let
   dotfilesPath = "${homeDir}/nix/dotfiles";
 in
 {
+  imports = [
+    ./ssh.nix
+  ];
+
   # Home Manager needs a bit of information about you and the paths it should
   # manage.
   home.username = "sebastorama";
@@ -210,20 +214,6 @@ in
     };
   };
 
-  programs.ssh = {
-    enable = true;
-    # Disable deprecated defaults and set ours explicitly
-    enableDefaultConfig = false;
-    settings = {
-      "*" = {
-        AddKeysToAgent = "yes";
-      };
-      "14m3" = {
-        hostname = "100.92.56.95";
-        user = "sebastorama";
-      };
-    };
-  };
 
   programs.tmux = {
     enable = true;
