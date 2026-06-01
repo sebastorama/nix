@@ -223,7 +223,26 @@ in
     newSession = false;
     aggressiveResize = true;
     keyMode = "vi";
-    plugins = with pkgs.tmuxPlugins; [ tokyo-night-tmux vim-tmux-navigator ];
+    plugins = with pkgs.tmuxPlugins; [
+      {
+        # These options must be set BEFORE the theme's run-shell executes,
+        # otherwise the status line is drawn with defaults and the settings
+        # only take effect after a manual `source-file`. Home Manager emits a
+        # plugin's extraConfig immediately before its run-shell, so keep all
+        # @tokyo-night-tmux_* options here rather than in the block below.
+        plugin = tokyo-night-tmux;
+        extraConfig = ''
+          set -g @tokyo-night-tmux_theme storm
+          set -g @tokyo-night-tmux_window_tidy_icons 0
+
+          # Use plain ASCII window numbers; the default "digital" style uses
+          # Unicode Segmented Digits (U+1FBF0-9) that no Nerd Font ships, so
+          # they render as tofu boxes.
+          set -g @tokyo-night-tmux_window_id_style none
+        '';
+      }
+      vim-tmux-navigator
+    ];
     extraConfig = ''
       set-window-option -g window-status-current-style fg=red
       set-option -g status-position top
@@ -279,8 +298,6 @@ in
       set -g default-shell "$SHELL"
 
       set -sg escape-time 0
-      set -g @tokyo-night-tmux_theme storm
-      set -g @tokyo-night-tmux_window_tidy_icons 0
     '';
   };
 
