@@ -45,6 +45,7 @@ in
     gawk
     gcc
     gh
+    gnumake
   ] ++ pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
     google-chrome
   ] ++ [
