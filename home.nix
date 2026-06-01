@@ -294,6 +294,17 @@ in
       bind-key -r C-l send-keys 'C-l'
       bind-key -r C-k send-keys 'C-k'
 
+      # Right-click context menu with a Paste entry
+      bind-key -n MouseDown3Pane display-menu -t = -x M -y M \
+        "Paste"          p "paste-buffer -p" \
+        "" \
+        "Copy Mode"      c "copy-mode" \
+        "Horizontal Split" h "split-window -h -c '#{pane_current_path}'" \
+        "Vertical Split" v "split-window -v -c '#{pane_current_path}'" \
+        "" \
+        "Zoom"           z "resize-pane -Z" \
+        "Kill Pane"      x "kill-pane"
+
       set -gu default-command
       set -g default-shell "$SHELL"
 
