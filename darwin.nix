@@ -1,5 +1,6 @@
 { pkgs, self, system, hostname, ... }: {
-  nixpkgs.config.allowUnfree = true;
+  # allowUnfree and the platform are set on the pkgs instance built in
+  # flake.nix (mkPkgs), which is injected via nixpkgs.pkgs.
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
@@ -179,7 +180,4 @@
       auth       sufficient     pam_tid.so
     '';
   };
-
-  # The platform the configuration will be used on.
-  nixpkgs.hostPlatform = system;
 }

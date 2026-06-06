@@ -39,6 +39,7 @@
     mkDarwinSystem = hostname: system: nix-darwin.lib.darwinSystem {
       modules = [
         ./darwin.nix
+        { nixpkgs.pkgs = mkPkgs system; }
         home-manager.darwinModules.home-manager {
           users.users.sebastorama = {
             name = "sebastorama";
@@ -52,7 +53,6 @@
         inherit inputs hostname;
         system = system;
         self = self;
-        pkgs = mkPkgs system;
       };
     };
 
@@ -68,14 +68,17 @@
     };
 
     mkNixosWslSystem = hostname: system: nixpkgs.lib.nixosSystem {
-      inherit system;
+      # `system` intentionally not passed here: the platform comes from the
+      # pre-built pkgs injected via nixpkgs.pkgs (readOnlyPkgs disables the
+      # nixpkgs.system option).
       modules = [
         ./wsl_configuration.nix
         nixos-wsl.nixosModules.default
+        nixpkgs.nixosModules.readOnlyPkgs
+        { nixpkgs.pkgs = mkPkgs system; }
       ];
       specialArgs = {
         inherit inputs hostname self;
-        pkgs = mkPkgs system;
       };
     };
   in

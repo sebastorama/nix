@@ -1,4 +1,4 @@
-{ config, lib, pkgs, inputs, hostname, ... }:
+{ config, pkgs, inputs, hostname, ... }:
 
 {
   imports = [
@@ -48,7 +48,7 @@
 
   # Enable flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
-  nixpkgs.config.allowUnfree = true;
+  # allowUnfree is set on the pkgs instance built in flake.nix (mkPkgs)
 
   # User configuration
   users.users.sebastorama = {
@@ -90,8 +90,9 @@
     };
   };
 
-  # Enable Docker
-  virtualisation.docker.enable = true;
+  # Docker is provided by Docker Desktop's WSL integration (wsl.docker-desktop.enable above).
+  # Do NOT enable a native dockerd here — it fights Docker Desktop over /run/docker.sock.
+  # virtualisation.docker.enable = true;
 
   # Enable zsh system-wide
   programs.zsh.enable = true;
