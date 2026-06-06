@@ -244,6 +244,32 @@ in
         '';
       }
       vim-tmux-navigator
+      {
+        # Save/restore full sessions: window (tab) names, pane layout & sizes,
+        # working directories, and pane contents. resurrect MUST be listed
+        # before continuum, which builds on it.
+        plugin = resurrect;
+        extraConfig = ''
+          set -g @resurrect-capture-pane-contents 'on'
+          set -g @resurrect-strategy-nvim 'session'
+        '';
+      }
+      {
+        # Automatically save every 15 min and auto-restore on tmux server start.
+        plugin = continuum;
+        extraConfig = ''
+          set -g @continuum-restore 'on'
+          set -g @continuum-save-interval '15'
+        '';
+      }
+      {
+        # Fuzzy-find (via fzf popup) sessions, windows, panes, commands and
+        # key bindings. Trigger with `prefix + F`.
+        plugin = tmux-fzf;
+        extraConfig = ''
+          TMUX_FZF_LAUNCH_KEY="F"
+        '';
+      }
     ];
     extraConfig = ''
       set-window-option -g window-status-current-style fg=red
