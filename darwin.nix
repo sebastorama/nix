@@ -43,6 +43,7 @@
       "google-chrome@canary"
       "google-earth-pro"
       "handbrake-app"
+      "heynote"
       "iina"
       "iterm2"
       "jetbrains-toolbox"

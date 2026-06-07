@@ -68,6 +68,7 @@
   home-manager = {
     useGlobalPkgs = true;
     useUserPackages = true;
+    backupFileExtension = "backup";
     extraSpecialArgs = { inherit inputs hostname; system = pkgs.system; };
     users.sebastorama = import ./home.nix;
   };

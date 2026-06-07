@@ -46,6 +46,7 @@
             home = "/Users/sebastorama";
           };
           home-manager.useGlobalPkgs = true;
+          home-manager.backupFileExtension = "backup";
           home-manager.users.sebastorama = import ./home.nix;
         }
       ];
