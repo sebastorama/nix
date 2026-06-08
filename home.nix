@@ -58,6 +58,7 @@ in
     lsd
     mtr
     nil
+    nixd
     nixfmt
     nodejs_24
     pgformatter

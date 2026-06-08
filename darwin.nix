@@ -44,6 +44,7 @@
       "google-earth-pro"
       "handbrake-app"
       "heynote"
+      "hyperkey"
       "iina"
       "iterm2"
       "jetbrains-toolbox"
@@ -156,7 +157,7 @@
   };
 
   system.defaults.NSGlobalDomain = {
-    "com.apple.keyboard.fnState" = true;
+    "com.apple.keyboard.fnState" = false;
     ApplePressAndHoldEnabled = false;
     AppleShowScrollBars = "Always";
     InitialKeyRepeat = 15;
