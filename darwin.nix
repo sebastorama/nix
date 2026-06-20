@@ -15,6 +15,8 @@
     taps = [
       "dopplerhq/cli"
       "qmk/qmk"
+      "typewhisper/tap"
+      "xykong/tap"
     ];
 
     casks = [
@@ -34,9 +36,11 @@
       "cursor"
       "devpod"
       "discord"
+      "dockdoor"
       "docker-desktop"
       "dropbox"
       "firefox"
+      "flux-markdown"
       "focusrite-control"
       "ghostty"
       "google-chrome"
@@ -79,6 +83,7 @@
       "the-unarchiver"
       "todoist-app"
       "transcribe"
+      "typewhisper"
       "visual-studio-code"
       "vial"
       "vnc-viewer"
