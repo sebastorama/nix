@@ -38,6 +38,7 @@
       "discord"
       "dockdoor"
       "docker-desktop"
+      "doppler"
       "dropbox"
       "firefox"
       "flux-markdown"
@@ -74,6 +75,7 @@
       "qgis"
       "qmk-toolbox"
       "raycast"
+      "slack"
       "steam"
       "steelseries-gg"
       "spotify"
@@ -97,13 +99,11 @@
 
     brews = [
       "cloudflared"
-      "dopplerhq/cli/doppler"
       "findutils"
       "gnupg"
       "graphviz"
       "haskell-stack"
       "openjdk"
-      "qmk/qmk/qmk"
       "sevenzip"
       "terminal-notifier"
     ];
