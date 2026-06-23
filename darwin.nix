@@ -51,6 +51,7 @@
       "heynote"
       "hyperkey"
       "iina"
+      "imagemagick"
       "iterm2"
       "jetbrains-toolbox"
       "karabiner-elements"
