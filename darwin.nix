@@ -14,6 +14,7 @@
 
     taps = [
       "dopplerhq/cli"
+      "modem-dev/tap"
       "qmk/qmk"
       "typewhisper/tap"
       "xykong/tap"
@@ -102,6 +103,7 @@
       "gnupg"
       "graphviz"
       "haskell-stack"
+      "modem-dev/tap/hunk"
       "openjdk"
       "sevenzip"
       "terminal-notifier"
