@@ -140,7 +140,7 @@
     autohide = true;
     tilesize = 44;
     largesize = 96;
-    magnification = true;
+    magnification = false;
     showhidden = true;
     scroll-to-open = true;
     orientation = "bottom";
