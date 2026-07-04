@@ -91,7 +91,6 @@
       "vnc-viewer"
       "vivaldi"
       "wasabi-wallet"
-      "whatsapp"
       "wifiman"
       "zed@preview"
       "zen"

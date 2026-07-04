@@ -125,12 +125,6 @@ in
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
-    ".local/scripts/tmux-agent-state".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/tmux-agent-state";
-
-    ".local/scripts/lll".source =
-      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/lll";
-
     ".gitignore_global".text = ''
       .claude*
       .vscode
@@ -331,6 +325,8 @@ in
         "Horizontal Split" h "split-window -h -c '#{pane_current_path}'" \
         "Vertical Split" v "split-window -v -c '#{pane_current_path}'" \
         "" \
+        "#{?pane_marked,Unmark Pane,Mark Pane}" m "if-shell -F '#{pane_marked}' 'select-pane -M' 'select-pane -m'" \
+        "Swap With Marked" s "swap-pane" \
         "Zoom"           z "resize-pane -Z" \
         "Kill Pane"      x "kill-pane"
 
