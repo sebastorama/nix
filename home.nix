@@ -270,6 +270,12 @@ in
       set-window-option -g window-status-current-style fg=red
       set-option -g status-position top
 
+      # tmux 3.7 draws the command prompt on top of the status line and only
+      # clears the full width when message-style has a fill colour; the theme
+      # predates this, so append one (storm background) to blank the bar.
+      set -ga message-style "fill=#24283b"
+      set -ga message-command-style "fill=#24283b"
+
       set -g default-terminal 'tmux-256color'
 
       set -as terminal-overrides ',*:Smulx=\E[4::%p1%dm'  # undercurl support
@@ -287,6 +293,9 @@ in
 
       bind -r l select-pane -R
       bind -r h select-pane -L
+      # Reorder windows; -d keeps focus on the moved window.
+      bind -r "<" swap-window -d -t -1
+      bind -r ">" swap-window -d -t +1
       bind -r z resize-pane -Z
       bind-key -n C-M-5 split-window -h
 
