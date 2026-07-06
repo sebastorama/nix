@@ -1,6 +1,13 @@
 { pkgs, self, system, hostname, ... }: {
   # allowUnfree and the platform are set on the pkgs instance built in
   # flake.nix (mkPkgs), which is injected via nixpkgs.pkgs.
+
+  # nix-darwin (a1fa429) still passes --toc-depth to nixos-render-docs,
+  # which newer nixpkgs removed; skip the HTML manual until upstream fixes it.
+  # The uninstaller embeds a default-config system that also builds the
+  # manual, so it has to go too.
+  documentation.doc.enable = false;
+  system.tools.darwin-uninstaller.enable = false;
   # List packages installed in system profile. To search by name, run:
   # $ nix-env -qaP | grep wget
   environment.systemPackages = with pkgs; [
