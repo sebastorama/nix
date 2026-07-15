@@ -60,7 +60,7 @@ in
     nil
     nixd
     nixfmt
-    nodejs_24
+    nodejs_26
     pgformatter
     pipx
     pnpm
