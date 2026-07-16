@@ -117,6 +117,9 @@ in
     ".config/ghostty/config".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/ghostty_conf";
 
+    ".config/hunk/config.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/hunk_config.toml";
+
     ".config/nvim/".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
 
