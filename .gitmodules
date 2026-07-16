@@ -4,3 +4,6 @@
 [submodule "dotfiles/doom"]
 	path = dotfiles/doom
 	url = git@github.com:sebastorama/doom.d
+[submodule "dotfiles/claude"]
+	path = dotfiles/claude
+	url = git@github.com:sebastorama/claude-config

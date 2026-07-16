@@ -120,6 +120,9 @@ in
     ".config/nvim/".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
 
+    ".claude".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/claude";
+
     ".npmrc".source = dotfiles/npmrc;
 
     ".config/crush/crush.json".source =
