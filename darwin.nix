@@ -179,6 +179,21 @@
     NSWindowShouldDragOnGesture = true;
   };
 
+  # Hyper+A (⌃⌥⇧⌘A via Hyperkey) -> "Move focus to the Dock" (symbolic hotkey 8)
+  system.defaults.CustomUserPreferences."com.apple.symbolichotkeys" = {
+    AppleSymbolicHotKeys."8" = {
+      enabled = true;
+      value = {
+        parameters = [
+          97       # ASCII "a"
+          0        # keycode for A
+          1966080  # shift+ctrl+opt+cmd
+        ];
+        type = "standard";
+      };
+    };
+  };
+
   system.keyboard = {
     enableKeyMapping = false;
   };
