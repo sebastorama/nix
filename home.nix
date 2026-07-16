@@ -125,6 +125,9 @@ in
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
+    ".config/claude/gpt-proxy.json".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/gpt-proxy.json";
+
     ".gitignore_global".text = ''
       .claude*
       .vscode
@@ -394,6 +397,7 @@ in
       ls = "lsd";
       wmm = "nvim '${homeDir}/obsidian/Main/Working Memory.md'";
       ccc = "claude --dangerously-skip-permissions";
+      ccx = "claude --settings ${homeDir}/.config/claude/gpt-proxy.json --dangerously-skip-permissions";
     };
 
     autosuggestion = {

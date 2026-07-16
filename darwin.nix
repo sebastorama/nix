@@ -105,6 +105,7 @@
     ];
 
     brews = [
+      "cliproxyapi"
       "cloudflared"
       "findutils"
       "gnupg"
