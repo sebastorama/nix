@@ -1,4 +1,4 @@
-{ config, _lib, pkgs, _system, ... }@_inputs:
+{ config, _lib, pkgs, _system, inputs, ... }:
 
 let
   # Detect home directory based on system
@@ -47,6 +47,7 @@ in
     gcc
     gh
     gnumake
+    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
   ] ++ pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
     google-chrome
   ] ++ [

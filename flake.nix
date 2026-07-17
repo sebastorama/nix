@@ -10,6 +10,8 @@
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
+    herdr.url = "github:ogulcancelik/herdr";
+
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     nixos-wsl.url = "github:nix-community/nixos-wsl";
@@ -47,6 +49,7 @@
           };
           home-manager.useGlobalPkgs = true;
           home-manager.backupFileExtension = "backup";
+          home-manager.extraSpecialArgs = { inherit inputs; };
           home-manager.users.sebastorama = import ./home.nix;
         }
       ];
