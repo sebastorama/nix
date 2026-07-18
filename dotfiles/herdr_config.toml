@@ -1,0 +1,92 @@
+onboarding = false
+[theme]
+name = "dracula"
+auto_switch = false
+
+[ui]
+# Share divider borders between splits instead of separated panes (tmux-style).
+pane_gaps = false
+
+# Minimum sidebar width when expanded (columns; default 18)
+sidebar_min_width = 10
+
+# Hide the tab row when a workspace has exactly one tab.
+hide_tab_bar_when_single_tab = true
+
+# Keybindings translated from tmux (home.nix programs.tmux).
+# Herdr defaults already cover: prefix ctrl+b, prefix+c new tab (new_cwd =
+# "follow" replicates tmux's -c "#{pane_current_path}"), prefix+h/l pane
+# focus, prefix+z zoom, prefix+[ copy mode with v/y selection, mouse support.
+agent_panel_sort = "priority"
+show_agent_labels_on_pane_borders = false
+[keys]
+# Use Vim keys as aliases for workspace selection in navigate mode.
+navigate_workspace_up = ["up", "k"]
+navigate_workspace_down = ["down", "j"]
+
+# tmux: bind '"' / bind % splits (herdr defaults kept as first binding)
+split_horizontal = ["prefix+minus", "prefix+double_quote"]
+# tmux also had ctrl+alt+5 as a direct horizontal-split chord
+split_vertical = ["prefix+v", "prefix+percent", "ctrl+alt+5"]
+
+# tmux: alt+minus / alt+= previous/next window
+previous_tab = ["prefix+p", "alt+minus"]
+next_tab = ["prefix+n", "alt+="]
+
+# tmux: F3 choose-tree -> goto picker
+goto = ["prefix+g", "f3"]
+
+# tmux: prefix+t sesh session picker -> workspace picker
+workspace_picker = ["prefix+w", "prefix+t"]
+
+# tmux: prefix+z and bare F4 zoom
+zoom = ["prefix+z", "f4"]
+
+# tmux: prefix+ctrl+space cycled to next pane (the zoom half of that binding
+# isn't composable in herdr; use prefix+z after)
+cycle_pane_next = ["prefix+tab", "prefix+ctrl+space"]
+
+# vim-tmux-navigator's ctrl+h/j/k/l can't pass through herdr; ctrl+alt is the
+# terminal-safe direct-chord family herdr recommends
+focus_pane_left = ["prefix+h", "ctrl+alt+h"]
+focus_pane_down = ["prefix+j", "ctrl+alt+j"]
+focus_pane_up = ["prefix+k", "ctrl+alt+k"]
+focus_pane_right = ["prefix+l", "ctrl+alt+l"]
+
+# tmux: prefix ctrl+u — fzf-pick URLs from scrollback and open them
+[[keys.command]]
+key = "prefix+ctrl+u"
+type = "popup"
+command = 'herdr pane read "$HERDR_ACTIVE_PANE_ID" --source recent-unwrapped --lines 2000 | grep -oE "(https?)://[^ ]*" | sort -u | fzf --multi --bind alt-a:select-all,alt-d:deselect-all | xargs open'
+description = "open URLs from scrollback"
+height = "50%"
+
+# tmux: bind ! break-pane -d -n _hidden_pane
+[[keys.command]]
+key = "prefix+!"
+type = "shell"
+command = 'herdr pane move "$HERDR_ACTIVE_PANE_ID" --new-tab --label _hidden_pane --no-focus'
+description = "break pane to hidden tab"
+
+# tmux: bind @ join-pane (bring the hidden pane back into this tab)
+[[keys.command]]
+key = "prefix+@"
+type = "shell"
+command = "tab=$(herdr tab list | jq -r --arg ws \"$HERDR_ACTIVE_WORKSPACE_ID\" '.result.tabs[] | select(.workspace_id==$ws and .label==\"_hidden_pane\") | .tab_id' | head -n1); pane=$(herdr pane list | jq -r --arg t \"$tab\" '.result.panes[] | select(.tab_id==$t) | .pane_id' | head -n1); [ -n \"$pane\" ] && herdr pane move \"$pane\" --tab \"$HERDR_ACTIVE_TAB_ID\" --split right --focus"
+description = "join hidden pane back"
+
+# tmux: bind < / > swap-window -1/+1 (also covered S-F1/S-F2, C-M-PageUp/Down)
+[[keys.command]]
+key = "prefix+<"
+type = "shell"
+command = "i=$(herdr tab list --workspace \"$HERDR_ACTIVE_WORKSPACE_ID\" | jq -r --arg t \"$HERDR_ACTIVE_TAB_ID\" '.result.tabs | to_entries[] | select(.value.tab_id==$t) | .key'); [ \"$i\" -gt 0 ] && printf '{\"id\":\"mv\",\"method\":\"tab.move\",\"params\":{\"tab_id\":\"%s\",\"insert_index\":%d}}\\n' \"$HERDR_ACTIVE_TAB_ID\" $((i-1)) | nc -U -w 2 \"$HERDR_SOCKET_PATH\""
+description = "move tab left"
+
+[[keys.command]]
+key = "prefix+>"
+type = "shell"
+command = "out=$(herdr tab list --workspace \"$HERDR_ACTIVE_WORKSPACE_ID\"); i=$(printf '%s' \"$out\" | jq -r --arg t \"$HERDR_ACTIVE_TAB_ID\" '.result.tabs | to_entries[] | select(.value.tab_id==$t) | .key'); c=$(printf '%s' \"$out\" | jq -r '.result.tabs | length'); [ \"$i\" -lt $((c-1)) ] && printf '{\"id\":\"mv\",\"method\":\"tab.move\",\"params\":{\"tab_id\":\"%s\",\"insert_index\":%d}}\\n' \"$HERDR_ACTIVE_TAB_ID\" $((i+2)) | nc -U -w 2 \"$HERDR_SOCKET_PATH\""
+description = "move tab right"
+
+[ui.toast]
+delivery = "system"

@@ -64,7 +64,7 @@ in
     nodejs_26
     pgformatter
     pipx
-    pnpm
+    (pnpm.override { nodejs-slim = nodejs_26; })
     postgresql_18
     python3
     ripgrep
@@ -120,6 +120,9 @@ in
 
     ".config/hunk/config.toml".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/hunk_config.toml";
+
+    ".config/herdr/config.toml".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/herdr_config.toml";
 
     ".config/nvim/".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/nvim";
