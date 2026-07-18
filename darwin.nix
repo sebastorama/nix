@@ -180,6 +180,7 @@
   };
 
   # Hyper+A (⌃⌥⇧⌘A via Hyperkey) -> "Move focus to the Dock" (symbolic hotkey 8)
+  # Hyper+D (⌃⌥⇧⌘D via Hyperkey) -> "Show Desktop" (symbolic hotkey 36)
   system.defaults.CustomUserPreferences."com.apple.symbolichotkeys" = {
     AppleSymbolicHotKeys."8" = {
       enabled = true;
@@ -187,6 +188,17 @@
         parameters = [
           97       # ASCII "a"
           0        # keycode for A
+          1966080  # shift+ctrl+opt+cmd
+        ];
+        type = "standard";
+      };
+    };
+    AppleSymbolicHotKeys."36" = {
+      enabled = true;
+      value = {
+        parameters = [
+          100      # ASCII "d"
+          2        # keycode for D
           1966080  # shift+ctrl+opt+cmd
         ];
         type = "standard";

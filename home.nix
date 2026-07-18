@@ -1,4 +1,4 @@
-{ config, _lib, pkgs, _system, inputs, ... }:
+{ config, lib, pkgs, _system, inputs, ... }:
 
 let
   # Detect home directory based on system
@@ -129,6 +129,9 @@ in
 
     ".npmrc".source = dotfiles/npmrc;
 
+    ".pi/agent/AGENTS.md".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/pi/AGENTS.md";
+
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
@@ -177,6 +180,19 @@ in
     LC_ALL="en_US.UTF-8";
     LANG="en_US.UTF-8";
   };
+
+  # Installed via npm rather than nixpkgs since it's not packaged there yet.
+  # Lands in ~/.npm-packages (see dotfiles/npmrc), which is already on PATH
+  # via home.sessionPath below.
+  home.activation.installPiCodingAgent = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${pkgs.nodejs_26}/bin/npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+  '';
+
+  home.activation.installPiPackages = lib.hm.dag.entryAfter [ "installPiCodingAgent" ] ''
+    export PATH="${pkgs.nodejs_26}/bin:$PATH"
+    run "$HOME/.npm-packages/bin/pi" install npm:pi-web-access
+    run "$HOME/.npm-packages/bin/pi" install npm:pi-chrome
+  '';
 
   programs.neovim.enable = true;
   programs.neovim.sideloadInitLua = true;
