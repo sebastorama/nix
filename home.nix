@@ -195,6 +195,7 @@ in
     export PATH="${pkgs.nodejs_26}/bin:$PATH"
     run "$HOME/.npm-packages/bin/pi" install npm:pi-web-access
     run "$HOME/.npm-packages/bin/pi" install npm:pi-chrome
+    run "$HOME/.npm-packages/bin/pi" install npm:pi-ask-user
   '';
 
   programs.neovim.enable = true;
