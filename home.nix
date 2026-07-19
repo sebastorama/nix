@@ -4,6 +4,7 @@ let
   # Detect home directory based on system
   homeDir = if pkgs.stdenv.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
   dotfilesPath = "${homeDir}/nix/dotfiles";
+  nodejsPackage = pkgs.nodejs_26;
 in
 {
   imports = [
@@ -61,10 +62,10 @@ in
     nil
     nixd
     nixfmt
-    nodejs_26
+    nodejsPackage
     pgformatter
     pipx
-    (pnpm.override { nodejs-slim = nodejs_26; })
+    (pnpm.override { nodejs-slim = nodejsPackage; })
     postgresql_18
     python3
     ripgrep
@@ -188,11 +189,16 @@ in
   # Lands in ~/.npm-packages (see dotfiles/npmrc), which is already on PATH
   # via home.sessionPath below.
   home.activation.installPiCodingAgent = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
-    run ${pkgs.nodejs_26}/bin/npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+    run ${nodejsPackage}/bin/npm install -g --ignore-scripts @earendil-works/pi-coding-agent
+  '';
+
+  home.activation.installOpenCode = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    export PATH="${nodejsPackage}/bin:$PATH"
+    run ${nodejsPackage}/bin/npm install -g opencode-ai
   '';
 
   home.activation.installPiPackages = lib.hm.dag.entryAfter [ "installPiCodingAgent" ] ''
-    export PATH="${pkgs.nodejs_26}/bin:$PATH"
+    export PATH="${nodejsPackage}/bin:$PATH"
     run "$HOME/.npm-packages/bin/pi" install npm:pi-web-access
     run "$HOME/.npm-packages/bin/pi" install npm:pi-chrome
     run "$HOME/.npm-packages/bin/pi" install npm:pi-ask-user
