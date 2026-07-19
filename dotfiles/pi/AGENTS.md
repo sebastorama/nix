@@ -18,6 +18,7 @@ When uncertain, prefer: Tailwind v4, TypeScript, pnpm, React, Convex, Clerk.
 - If a problem can be solved in a simpler way, propose it.
 
 ## Git
+- Never commit changes unless the user explicitly asks you to commit them.
 - Always use Conventional Commits format for the commit headline (e.g., `feat: ...`, `fix: ...`, `chore: ...`).
 
 ## General preferences
