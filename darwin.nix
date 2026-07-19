@@ -212,6 +212,15 @@
 
   networking.hostName = hostname;
 
+  services.openssh = {
+    enable = true;
+    extraConfig = ''
+      PermitRootLogin no
+      PasswordAuthentication no
+      KbdInteractiveAuthentication no
+    '';
+  };
+
   security.sudo.extraConfig = ''
     sebastorama ALL=(ALL) NOPASSWD: ALL
   '';
