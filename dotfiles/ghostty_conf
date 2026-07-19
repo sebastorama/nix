@@ -7,6 +7,10 @@ window-padding-balance = true
 font-size = 15
 adjust-cell-height = 8%
 
+# Let Herdr handle workspace navigation.
+keybind = cmd+shift+[=unbind
+keybind = cmd+shift+]=unbind
+
 # Splits: navigate (vim-style)
 keybind = cmd+opt+h=goto_split:left
 keybind = cmd+opt+j=goto_split:down
