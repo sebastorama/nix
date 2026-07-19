@@ -390,12 +390,6 @@ in
       if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
         . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
       fi
-
-      # Auto-start zsh if we're in an interactive shell
-# But don't exec if we're in a nix-shell (it would break the nix-shell environment)
-      if [[ $- == *i* ]] && [[ -z "$IN_NIX_SHELL" ]] && command -v zsh &> /dev/null; then
-        exec zsh
-      fi
     '';
   };
 
