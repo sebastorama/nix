@@ -98,7 +98,6 @@
       "vial"
       "vnc-viewer"
       "vivaldi"
-      "wasabi-wallet"
       "wifiman"
       "zed@preview"
       "zen"
@@ -171,7 +170,7 @@
   };
 
   system.defaults.NSGlobalDomain = {
-    "com.apple.keyboard.fnState" = false;
+    "com.apple.keyboard.fnState" = true;
     ApplePressAndHoldEnabled = false;
     AppleShowScrollBars = "Always";
     InitialKeyRepeat = 15;
@@ -182,6 +181,25 @@
   # Hyper+A (⌃⌥⇧⌘A via Hyperkey) -> "Move focus to the Dock" (symbolic hotkey 8)
   # Hyper+D (⌃⌥⇧⌘D via Hyperkey) -> "Show Desktop" (symbolic hotkey 36)
   system.defaults.CustomUserPreferences."com.apple.symbolichotkeys" = {
+    # Spotlight search: Option+Command+Space
+    AppleSymbolicHotKeys."64" = {
+      enabled = true;
+      value = {
+        parameters = [ 32 49 1572864 ];
+        type = "standard";
+      };
+    };
+    # Finder search: Control+Command+Space
+    AppleSymbolicHotKeys."65" = {
+      enabled = true;
+      value = {
+        parameters = [ 32 49 1310720 ];
+        type = "standard";
+      };
+    };
+    # Show Apps
+    AppleSymbolicHotKeys."160".enabled = false;
+
     AppleSymbolicHotKeys."8" = {
       enabled = true;
       value = {
