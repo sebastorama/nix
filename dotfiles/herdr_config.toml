@@ -10,6 +10,9 @@ pane_gaps = false
 # Minimum sidebar width when expanded (columns; default 18)
 sidebar_min_width = 10
 
+# Forward Option-right-click gestures to mouse-aware pane applications.
+right_click_passthrough_modifier = "alt"
+
 # Hide the tab row when a workspace has exactly one tab.
 hide_tab_bar_when_single_tab = true
 
@@ -57,6 +60,20 @@ focus_pane_down = ["prefix+j", "ctrl+alt+j"]
 focus_pane_up = ["prefix+k", "ctrl+alt+k"]
 focus_pane_right = ["prefix+l", "ctrl+alt+l"]
 
+# F1: fuzzy MRU Space selector from Herdr Recent Navigator.
+[[keys.command]]
+key = "f1"
+type = "plugin_action"
+command = "beyondlex.herdr-recent-navigator.focus-workspaces"
+description = "open Space navigator"
+
+# F2: fuzzy MRU Agent selector from Herdr Recent Navigator.
+[[keys.command]]
+key = "f2"
+type = "plugin_action"
+command = "beyondlex.herdr-recent-navigator.focus-agents"
+description = "open Agent navigator"
+
 # tmux: prefix ctrl+u — fzf-pick URLs from scrollback and open them
 [[keys.command]]
 key = "prefix+ctrl+u"
@@ -94,3 +111,6 @@ description = "move tab right"
 
 [ui.toast]
 delivery = "system"
+
+[ui.sound]
+enabled = false
