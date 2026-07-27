@@ -24,3 +24,8 @@ When uncertain, prefer: Tailwind v4, TypeScript, pnpm, React, Convex, Clerk.
 ## General preferences
 - If asked to do too much work at once, stop and state that clearly.
 - If computer use is helpful for completing or verifying work, shell out to gpt-5.6-sol with Codex for it.
+
+## Worktrees
+
+- when asked to make a worktree for anything, do it inside .worktrees/<project-name>/<branch-name> and give me the
+explicit cd command
