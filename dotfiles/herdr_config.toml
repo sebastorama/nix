@@ -67,12 +67,12 @@ type = "plugin_action"
 command = "beyondlex.herdr-recent-navigator.focus-workspaces"
 description = "open Space navigator"
 
-# F2: fuzzy MRU Agent selector from Herdr Recent Navigator.
+# F2: mouse-enabled command bar for tabs, agents, workspaces, repos, and branches.
 [[keys.command]]
 key = "f2"
 type = "plugin_action"
-command = "beyondlex.herdr-recent-navigator.focus-agents"
-description = "open Agent navigator"
+command = "herdr-bar.open"
+description = "open Herdr Bar"
 
 # tmux: prefix ctrl+u — fzf-pick URLs from scrollback and open them
 [[keys.command]]

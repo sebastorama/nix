@@ -56,6 +56,22 @@
         "type": "github"
       }
     },
+    "herdr-bar": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785001637,
+        "narHash": "sha256-O6jnFNhLcIbltEYwA9hsi/WU/Qqlhdu740XPK2OJtgY=",
+        "owner": "jeffarese",
+        "repo": "herdr-bar",
+        "rev": "58c23e5c8d7926044f67524f403257bacdf88f6b",
+        "type": "github"
+      },
+      "original": {
+        "owner": "jeffarese",
+        "repo": "herdr-bar",
+        "type": "github"
+      }
+    },
     "herdr-recent-navigator": {
       "flake": false,
       "locked": {
@@ -220,6 +236,7 @@
     "root": {
       "inputs": {
         "herdr": "herdr",
+        "herdr-bar": "herdr-bar",
         "herdr-recent-navigator": "herdr-recent-navigator",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",

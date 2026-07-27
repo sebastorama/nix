@@ -19,6 +19,22 @@ let
         --replace-fail './target/release/herdr-recent-navigator' './bin/herdr-recent-navigator'
     '';
   };
+  herdrBar = pkgs.stdenvNoCC.mkDerivation rec {
+    pname = "herdr-bar";
+    src = inputs.herdr-bar;
+    version = (builtins.fromTOML (builtins.readFile "${src}/herdr-plugin.toml")).version;
+
+    dontBuild = true;
+
+    installPhase = ''
+      runHook preInstall
+      mkdir -p "$out"
+      cp -R . "$out"
+      substituteInPlace "$out/herdr-plugin.toml" \
+        --replace-fail 'command = ["python3", "run.py"]' 'command = ["${pkgs.python3}/bin/python3", "run.py"]'
+      runHook postInstall
+    '';
+  };
 in
 {
   imports = [
@@ -207,6 +223,10 @@ in
   # via home.sessionPath below.
   home.activation.linkHerdrRecentNavigator = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run ${herdrPackage}/bin/herdr plugin link ${herdrRecentNavigator} --enabled
+  '';
+
+  home.activation.linkHerdrBar = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${herdrPackage}/bin/herdr plugin link ${herdrBar} --enabled
   '';
 
   home.activation.installPiCodingAgent = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
