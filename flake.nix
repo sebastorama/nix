@@ -11,6 +11,10 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
     herdr.url = "github:ogulcancelik/herdr";
+    herdr-recent-navigator = {
+      url = "github:beyondlex/herdr-recent-navigator";
+      flake = false;
+    };
 
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 

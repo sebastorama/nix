@@ -5,6 +5,20 @@ let
   homeDir = if pkgs.stdenv.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
   dotfilesPath = "${homeDir}/nix/dotfiles";
   nodejsPackage = pkgs.nodejs_26;
+  herdrPackage = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default;
+  herdrRecentNavigator = pkgs.rustPlatform.buildRustPackage rec {
+    pname = "herdr-recent-navigator";
+    src = inputs.herdr-recent-navigator;
+    version = (builtins.fromTOML (builtins.readFile "${src}/Cargo.toml")).package.version;
+
+    cargoLock.lockFile = "${src}/Cargo.lock";
+
+    postInstall = ''
+      cp herdr-plugin.toml "$out/herdr-plugin.toml"
+      substituteInPlace "$out/herdr-plugin.toml" \
+        --replace-fail './target/release/herdr-recent-navigator' './bin/herdr-recent-navigator'
+    '';
+  };
 in
 {
   imports = [
@@ -48,7 +62,7 @@ in
     gcc
     gh
     gnumake
-    inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default
+    herdrPackage
   ] ++ pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
     google-chrome
   ] ++ [
@@ -191,6 +205,10 @@ in
   # Installed via npm rather than nixpkgs since it's not packaged there yet.
   # Lands in ~/.npm-packages (see dotfiles/npmrc), which is already on PATH
   # via home.sessionPath below.
+  home.activation.linkHerdrRecentNavigator = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${herdrPackage}/bin/herdr plugin link ${herdrRecentNavigator} --enabled
+  '';
+
   home.activation.installPiCodingAgent = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run ${nodejsPackage}/bin/npm install -g --ignore-scripts @earendil-works/pi-coding-agent
   '';

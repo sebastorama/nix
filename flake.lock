@@ -56,6 +56,22 @@
         "type": "github"
       }
     },
+    "herdr-recent-navigator": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1785026834,
+        "narHash": "sha256-04DLEYphnrr+/M5LjMc0IuikIs0jGXwVKcVVgsUzyc4=",
+        "owner": "beyondlex",
+        "repo": "herdr-recent-navigator",
+        "rev": "d19b4845a38c40fde6a5649018adfa0e00e3d419",
+        "type": "github"
+      },
+      "original": {
+        "owner": "beyondlex",
+        "repo": "herdr-recent-navigator",
+        "type": "github"
+      }
+    },
     "home-manager": {
       "inputs": {
         "nixpkgs": [
@@ -204,6 +220,7 @@
     "root": {
       "inputs": {
         "herdr": "herdr",
+        "herdr-recent-navigator": "herdr-recent-navigator",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",
         "nix-darwin": "nix-darwin",
