@@ -471,6 +471,11 @@ in
       ta = "tmux new-session -As";
       ls = "lsd";
       wmm = "nvim '${homeDir}/obsidian/Main/Working Memory.md'";
+      # Coding agents always run with the system node, even when nix-direnv
+      # puts a project-specific node first in PATH.
+      claude = ''PATH="${nodejsPackage}/bin:$PATH" claude'';
+      codex = ''PATH="${nodejsPackage}/bin:$PATH" codex'';
+      pi = ''PATH="${nodejsPackage}/bin:$PATH" pi'';
       ccc = "claude --dangerously-skip-permissions";
       ccx = "claude --settings ${homeDir}/.config/claude/gpt-proxy.json --dangerously-skip-permissions";
     };

@@ -40,8 +40,8 @@ split_vertical = ["prefix+v", "prefix+percent", "ctrl+alt+5"]
 previous_tab = ["prefix+p", "alt+minus"]
 next_tab = ["prefix+n", "alt+="]
 
-# tmux: F3 choose-tree -> goto picker
-goto = ["prefix+g", "f3"]
+# tmux: prefix+g opens the built-in goto picker.
+goto = ["prefix+g"]
 
 # tmux: prefix+t sesh session picker -> workspace picker
 workspace_picker = ["prefix+w", "prefix+t"]
@@ -73,6 +73,13 @@ key = "f2"
 type = "plugin_action"
 command = "herdr-bar.open"
 description = "open Herdr Bar"
+
+# F3: Recent Navigator focused directly on its Agents (@) page.
+[[keys.command]]
+key = "f3"
+type = "plugin_action"
+command = "beyondlex.herdr-recent-navigator.focus-agents"
+description = "open Agents navigator"
 
 # tmux: prefix ctrl+u — fzf-pick URLs from scrollback and open them
 [[keys.command]]
