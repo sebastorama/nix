@@ -10,47 +10,6 @@ let
     export NPM_CONFIG_PREFIX="${npmGlobalPrefix}"
     run mkdir -p "$NPM_CONFIG_PREFIX"
   '';
-  orbSync = pkgs.writeShellApplication {
-    name = "orb-sync";
-    runtimeInputs = with pkgs; [ fzf openssh rsync ];
-    text = ''
-      source_dir="/Users/sebastorama/nix"
-      ssh_config="$HOME/.orbstack/ssh/config"
-
-      if ! command -v orb >/dev/null; then
-        echo "orb-sync: OrbStack is not installed" >&2
-        exit 1
-      fi
-
-      if [[ ! -d "$source_dir" || ! -f "$ssh_config" ]]; then
-        echo "orb-sync: missing $source_dir or $ssh_config" >&2
-        exit 1
-      fi
-
-      machines="$(orb list --quiet)"
-      if [[ -z "$machines" ]]; then
-        echo "orb-sync: no OrbStack machines found" >&2
-        exit 1
-      fi
-
-      machine="$(printf '%s\n' "$machines" | fzf --prompt='OrbStack machine> ')" || exit 0
-      orb start "$machine" >/dev/null
-
-      if ! ssh -F "$ssh_config" "$machine@orb" 'command -v rsync >/dev/null'; then
-        echo "orb-sync: rsync is not installed in $machine" >&2
-        exit 1
-      fi
-
-      echo "Mirroring $source_dir -> $machine@orb:~/nix/"
-      rsync -a --delete --itemize-changes \
-        --exclude='.git' \
-        --exclude='.direnv' \
-        --exclude='.worktrees' \
-        --exclude='result' \
-        -e "ssh -F $ssh_config" \
-        "$source_dir/" "$machine@orb:~/nix/"
-    '';
-  };
   herdrPackage = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default;
   herdrRecentNavigator = pkgs.rustPlatform.buildRustPackage rec {
     pname = "herdr-recent-navigator";
@@ -125,8 +84,6 @@ in
     gh
     gnumake
     herdrPackage
-  ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-    orbSync
   ] ++ pkgs.lib.optionals (
     pkgs.stdenv.isLinux && pkgs.stdenv.hostPlatform.isx86_64
   ) [

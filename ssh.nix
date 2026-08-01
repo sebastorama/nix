@@ -1,8 +1,9 @@
-{ ... }:
+{ lib, pkgs, ... }:
 
 {
   programs.ssh = {
     enable = true;
+    includes = lib.optionals pkgs.stdenv.isDarwin [ "~/.orbstack/ssh/config" ];
     # Disable deprecated defaults and set ours explicitly
     enableDefaultConfig = false;
     settings = {

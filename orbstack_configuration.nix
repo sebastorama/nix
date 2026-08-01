@@ -77,6 +77,7 @@ in
     systemPackages = with pkgs; [
       curl
       git
+      ghostty.terminfo
       htop
       rsync
       vim
