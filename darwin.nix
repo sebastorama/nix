@@ -179,7 +179,9 @@
   };
 
   # Hyper+A (⌃⌥⇧⌘A via Hyperkey) -> "Move focus to the Dock" (symbolic hotkey 8)
-  # Hyper+D (⌃⌥⇧⌘D via Hyperkey) -> "Show Desktop" (symbolic hotkey 36)
+  # Hyper+1 (⌃⌥⇧⌘1 via Hyperkey) -> "Mission Control" (symbolic hotkey 32)
+  # Hyper+2 (⌃⌥⇧⌘2 via Hyperkey) -> "Application Windows" (symbolic hotkey 33)
+  # Hyper+3 (⌃⌥⇧⌘3 via Hyperkey) -> "Show Desktop" (symbolic hotkey 36)
   system.defaults.CustomUserPreferences."com.apple.symbolichotkeys" = {
     # Spotlight search: Option+Command+Space
     AppleSymbolicHotKeys."64" = {
@@ -211,12 +213,34 @@
         type = "standard";
       };
     };
+    AppleSymbolicHotKeys."32" = {
+      enabled = true;
+      value = {
+        parameters = [
+          49       # ASCII "1"
+          18       # keycode for 1
+          1966080  # shift+ctrl+opt+cmd
+        ];
+        type = "standard";
+      };
+    };
+    AppleSymbolicHotKeys."33" = {
+      enabled = true;
+      value = {
+        parameters = [
+          50       # ASCII "2"
+          19       # keycode for 2
+          1966080  # shift+ctrl+opt+cmd
+        ];
+        type = "standard";
+      };
+    };
     AppleSymbolicHotKeys."36" = {
       enabled = true;
       value = {
         parameters = [
-          100      # ASCII "d"
-          2        # keycode for D
+          51       # ASCII "3"
+          20       # keycode for 3
           1966080  # shift+ctrl+opt+cmd
         ];
         type = "standard";

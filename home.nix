@@ -1,10 +1,56 @@
-{ config, lib, pkgs, _system, inputs, ... }:
+{ config, lib, pkgs, _system, inputs, hostname, ... }:
 
 let
   # Detect home directory based on system
   homeDir = if pkgs.stdenv.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
   dotfilesPath = "${homeDir}/nix/dotfiles";
   nodejsPackage = pkgs.nodejs_26;
+  npmGlobalPrefix = "${homeDir}/.npm-packages";
+  npmGlobalEnv = ''
+    export NPM_CONFIG_PREFIX="${npmGlobalPrefix}"
+    run mkdir -p "$NPM_CONFIG_PREFIX"
+  '';
+  orbSync = pkgs.writeShellApplication {
+    name = "orb-sync";
+    runtimeInputs = with pkgs; [ fzf openssh rsync ];
+    text = ''
+      source_dir="/Users/sebastorama/nix"
+      ssh_config="$HOME/.orbstack/ssh/config"
+
+      if ! command -v orb >/dev/null; then
+        echo "orb-sync: OrbStack is not installed" >&2
+        exit 1
+      fi
+
+      if [[ ! -d "$source_dir" || ! -f "$ssh_config" ]]; then
+        echo "orb-sync: missing $source_dir or $ssh_config" >&2
+        exit 1
+      fi
+
+      machines="$(orb list --quiet)"
+      if [[ -z "$machines" ]]; then
+        echo "orb-sync: no OrbStack machines found" >&2
+        exit 1
+      fi
+
+      machine="$(printf '%s\n' "$machines" | fzf --prompt='OrbStack machine> ')" || exit 0
+      orb start "$machine" >/dev/null
+
+      if ! ssh -F "$ssh_config" "$machine@orb" 'command -v rsync >/dev/null'; then
+        echo "orb-sync: rsync is not installed in $machine" >&2
+        exit 1
+      fi
+
+      echo "Mirroring $source_dir -> $machine@orb:~/nix/"
+      rsync -a --delete --itemize-changes \
+        --exclude='.git' \
+        --exclude='.direnv' \
+        --exclude='.worktrees' \
+        --exclude='result' \
+        -e "ssh -F $ssh_config" \
+        "$source_dir/" "$machine@orb:~/nix/"
+    '';
+  };
   herdrPackage = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system}.default;
   herdrRecentNavigator = pkgs.rustPlatform.buildRustPackage rec {
     pname = "herdr-recent-navigator";
@@ -79,7 +125,11 @@ in
     gh
     gnumake
     herdrPackage
-  ] ++ pkgs.lib.optionals (!pkgs.stdenv.isDarwin) [
+  ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+    orbSync
+  ] ++ pkgs.lib.optionals (
+    pkgs.stdenv.isLinux && pkgs.stdenv.hostPlatform.isx86_64
+  ) [
     google-chrome
   ] ++ [
     gum
@@ -192,7 +242,7 @@ in
     "$HOME/.local/bin"
     "$HOME/.local/scripts"
     "$HOME/.local/hm-bins/duo"
-    "$HOME/.npm-packages/bin"
+    "${npmGlobalPrefix}/bin"
   ];
 
   # Home Manager can also manage your environment variables through
@@ -216,6 +266,8 @@ in
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL="en_US.UTF-8";
     LANG="en_US.UTF-8";
+  } // lib.optionalAttrs (hostname == "nixos-orbstack") {
+    PI_CHROME_BRIDGE_HOST = "0.0.0.0";
   };
 
   # Installed via npm rather than nixpkgs since it's not packaged there yet.
@@ -230,19 +282,22 @@ in
   '';
 
   home.activation.installPiCodingAgent = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${npmGlobalEnv}
     run ${nodejsPackage}/bin/npm install -g --ignore-scripts @earendil-works/pi-coding-agent
   '';
 
   home.activation.installOpenCode = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    ${npmGlobalEnv}
     export PATH="${nodejsPackage}/bin:$PATH"
     run ${nodejsPackage}/bin/npm install -g opencode-ai
   '';
 
   home.activation.installPiPackages = lib.hm.dag.entryAfter [ "installPiCodingAgent" ] ''
+    ${npmGlobalEnv}
     export PATH="${nodejsPackage}/bin:$PATH"
-    run "$HOME/.npm-packages/bin/pi" install npm:pi-web-access
-    run "$HOME/.npm-packages/bin/pi" install npm:pi-chrome
-    run "$HOME/.npm-packages/bin/pi" install npm:pi-ask-user
+    run "${npmGlobalPrefix}/bin/pi" install npm:pi-web-access
+    run "${npmGlobalPrefix}/bin/pi" install npm:pi-chrome
+    run "${npmGlobalPrefix}/bin/pi" install npm:pi-ask-user
   '';
 
   programs.neovim.enable = true;
@@ -499,9 +554,10 @@ in
       };
     }];
 
-    initContent = ''
+    initContent = lib.optionalString pkgs.stdenv.isDarwin ''
       eval "$(/opt/homebrew/bin/brew shellenv)"
-      source ~/.secrets
+    '' + ''
+      [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
     '';
   };
 

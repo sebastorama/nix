@@ -57,7 +57,7 @@
           };
           home-manager.useGlobalPkgs = true;
           home-manager.backupFileExtension = "backup";
-          home-manager.extraSpecialArgs = { inherit inputs; };
+          home-manager.extraSpecialArgs = { inherit inputs hostname; };
           home-manager.users.sebastorama = import ./home.nix;
         }
       ];
@@ -93,6 +93,17 @@
         inherit inputs hostname self;
       };
     };
+
+    mkOrbstackSystem = hostname: system: nixpkgs.lib.nixosSystem {
+      modules = [
+        ./orbstack_configuration.nix
+        nixpkgs.nixosModules.readOnlyPkgs
+        { nixpkgs.pkgs = mkPkgs system; }
+      ];
+      specialArgs = {
+        inherit inputs hostname self;
+      };
+    };
   in
   {
     # Darwin configurations
@@ -104,6 +115,7 @@
     # NixOS configurations
     nixosConfigurations = {
       "wsl" = mkNixosWslSystem "wsl" "x86_64-linux";
+      "nixos-orbstack" = mkOrbstackSystem "nixos-orbstack" "aarch64-linux";
     };
 
     # Home Manager configurations for non-NixOS Linux (standalone WSL distros)
