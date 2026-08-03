@@ -79,6 +79,7 @@
       "orion"
       "parsec"
       "parallels"
+      "qbittorrent"
       "qmk-toolbox"
       "raycast"
       "slack"
