@@ -24,6 +24,23 @@ let
         --replace-fail './target/release/herdr-recent-navigator' './bin/herdr-recent-navigator'
     '';
   };
+  herdrNavigator = pkgs.rustPlatform.buildRustPackage rec {
+    pname = "herdr-navigator";
+    src = inputs.herdr-navigator;
+    version = (builtins.fromTOML (builtins.readFile "${src}/Cargo.toml")).package.version;
+
+    cargoLock.lockFile = "${src}/Cargo.lock";
+
+    postInstall = ''
+      cp herdr-plugin.toml "$out/herdr-plugin.toml"
+      substituteInPlace "$out/herdr-plugin.toml" \
+        --replace-fail 'bin/herdr-navigator' './bin/herdr-navigator' \
+        --replace-fail 'alt+h' 'ctrl+h' \
+        --replace-fail 'alt+j' 'ctrl+j' \
+        --replace-fail 'alt+k' 'ctrl+k' \
+        --replace-fail 'alt+l' 'ctrl+l'
+    '';
+  };
   herdrBar = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "herdr-bar";
     src = inputs.herdr-bar;
@@ -232,6 +249,10 @@ in
   # via home.sessionPath below.
   home.activation.linkHerdrRecentNavigator = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     run ${herdrPackage}/bin/herdr plugin link ${herdrRecentNavigator} --enabled
+  '';
+
+  home.activation.linkHerdrNavigator = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    run ${herdrPackage}/bin/herdr plugin link ${herdrNavigator} --enabled
   '';
 
   home.activation.linkHerdrBar = lib.hm.dag.entryAfter [ "writeBoundary" ] ''

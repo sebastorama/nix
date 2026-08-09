@@ -72,6 +72,22 @@
         "type": "github"
       }
     },
+    "herdr-navigator": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1783416845,
+        "narHash": "sha256-7fpO6c7rOjbtMkCvx1gBTLejts2thfQtHP28mosMz2E=",
+        "owner": "willfish",
+        "repo": "herdr-navigator",
+        "rev": "6fe572538a86287a8076e0580bbe217c369f8c24",
+        "type": "github"
+      },
+      "original": {
+        "owner": "willfish",
+        "repo": "herdr-navigator",
+        "type": "github"
+      }
+    },
     "herdr-recent-navigator": {
       "flake": false,
       "locked": {
@@ -237,6 +253,7 @@
       "inputs": {
         "herdr": "herdr",
         "herdr-bar": "herdr-bar",
+        "herdr-navigator": "herdr-navigator",
         "herdr-recent-navigator": "herdr-recent-navigator",
         "home-manager": "home-manager",
         "neovim-nightly-overlay": "neovim-nightly-overlay",

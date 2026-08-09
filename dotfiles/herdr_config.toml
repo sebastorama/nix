@@ -53,12 +53,61 @@ zoom = ["prefix+z", "f4"]
 # isn't composable in herdr; use prefix+z after)
 cycle_pane_next = ["prefix+tab", "prefix+ctrl+space"]
 
-# vim-tmux-navigator's ctrl+h/j/k/l can't pass through herdr; ctrl+alt is the
-# terminal-safe direct-chord family herdr recommends
+# Keep direct Herdr pane navigation on prefixed and ctrl+alt chords. Bare
+# ctrl+h/j/k/l is handled by herdr-navigator so Neovim splits get priority.
 focus_pane_left = ["prefix+h", "ctrl+alt+h"]
 focus_pane_down = ["prefix+j", "ctrl+alt+j"]
 focus_pane_up = ["prefix+k", "ctrl+alt+k"]
 focus_pane_right = ["prefix+l", "ctrl+alt+l"]
+
+[[keys.command]]
+key = "ctrl+h"
+type = "plugin_action"
+command = "willfish.herdr-navigator.left"
+description = "navigate left"
+
+[[keys.command]]
+key = "ctrl+j"
+type = "plugin_action"
+command = "willfish.herdr-navigator.down"
+description = "navigate down"
+
+[[keys.command]]
+key = "ctrl+k"
+type = "plugin_action"
+command = "willfish.herdr-navigator.up"
+description = "navigate up"
+
+[[keys.command]]
+key = "ctrl+l"
+type = "plugin_action"
+command = "willfish.herdr-navigator.right"
+description = "navigate right"
+
+# Forward ctrl+h/j/k/l directly after pressing the prefix.
+[[keys.command]]
+key = "prefix+ctrl+h"
+type = "shell"
+command = 'herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+h'
+description = "send ctrl+h to pane"
+
+[[keys.command]]
+key = "prefix+ctrl+j"
+type = "shell"
+command = 'herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+j'
+description = "send ctrl+j to pane"
+
+[[keys.command]]
+key = "prefix+ctrl+k"
+type = "shell"
+command = 'herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+k'
+description = "send ctrl+k to pane"
+
+[[keys.command]]
+key = "prefix+ctrl+l"
+type = "shell"
+command = 'herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+l'
+description = "send ctrl+l to pane"
 
 # F1: fuzzy MRU Space selector from Herdr Recent Navigator.
 [[keys.command]]

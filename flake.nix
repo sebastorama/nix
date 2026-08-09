@@ -15,6 +15,10 @@
       url = "github:beyondlex/herdr-recent-navigator";
       flake = false;
     };
+    herdr-navigator = {
+      url = "github:willfish/herdr-navigator";
+      flake = false;
+    };
     herdr-bar = {
       url = "github:jeffarese/herdr-bar";
       flake = false;
