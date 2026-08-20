@@ -45,6 +45,27 @@
             doCheck = false;
             doInstallCheck = false;
           });
+          # Upstream installs the dylibs with an `@rpath/...` install name, so
+          # anything linking against them (curl-cffi -> yt-dlp) gets an
+          # unresolvable `@rpath/libcurl-impersonate.4.dylib` reference.
+          curl-impersonate = prev.curl-impersonate.overrideAttrs (old:
+            nixpkgs.lib.optionalAttrs prev.stdenv.hostPlatform.isDarwin {
+              postInstall = (old.postInstall or "") + ''
+                for f in $out/lib/libcurl-impersonate*.dylib; do
+                  [ -L "$f" ] || install_name_tool -id "$f" "$f"
+                done
+              '';
+            });
+          # Some curl-cffi tests fail on darwin (SSL error wording, websocket
+          # frame sizes, cookie handling) and are unrelated to yt-dlp usage.
+          pythonPackagesExtensions = prev.pythonPackagesExtensions ++ [
+            (_: pyPrev: {
+              curl-cffi = pyPrev.curl-cffi.overrideAttrs (_: {
+                doCheck = false;
+                doInstallCheck = false;
+              });
+            })
+          ];
         })
       ];
       config.allowUnfree = true;

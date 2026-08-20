@@ -13,8 +13,14 @@ sidebar_min_width = 10
 # Forward Option-right-click gestures to mouse-aware pane applications.
 right_click_passthrough_modifier = "alt"
 
-# Hide the tab row when a workspace has exactly one tab.
-hide_tab_bar_when_single_tab = true
+# Keep the tab row visible even with a single tab, so the zoom indicator below
+# always has somewhere to render.
+hide_tab_bar_when_single_tab = false
+
+# tmux-style status area at the right edge of the tab row. The zoom entry shows
+# a ZOOM pill while the active tab is zoomed, so a hidden pane is never a
+# surprise (per-tab "Z" markers stay independent of this).
+tab_bar_right = [{ type = "zoom" }]
 
 # Keybindings translated from tmux (home.nix programs.tmux).
 # Herdr defaults already cover: prefix ctrl+b, prefix+c new tab (new_cwd =
@@ -46,8 +52,8 @@ goto = ["prefix+g"]
 # tmux: prefix+t sesh session picker -> workspace picker
 workspace_picker = ["prefix+w", "prefix+t"]
 
-# tmux: prefix+z and bare F4 zoom
-zoom = ["prefix+z", "f4"]
+# tmux: prefix+z and bare F4 zoom. Bound below as shell commands so zooming can
+# also stamp a marker on the pane border (see "zoom + border marker").
 
 # tmux: prefix+ctrl+space cycled to next pane (the zoom half of that binding
 # isn't composable in herdr; use prefix+z after)
@@ -108,6 +114,52 @@ key = "prefix+ctrl+l"
 type = "shell"
 command = 'herdr pane send-keys "$HERDR_ACTIVE_PANE_ID" ctrl+l'
 description = "send ctrl+l to pane"
+
+# Zoom + border marker. Herdr has no zoom-conditional colour, so instead of
+# recolouring the ring we write into it: toggle zoom, then name the panes
+# "<ZOOM MARKER> N HIDDEN" so the border itself says a pane is hidden. Every pane
+# in the tab is marked, not just the zoomed one, because focusing a neighbour
+# while zoomed keeps zoom on and swaps which pane fills the tab. Unzoom clears
+# them all. A pane you named yourself is left alone.
+[[keys.command]]
+key = "prefix+z"
+type = "shell"
+description = "zoom (marks the pane border)"
+command = '''
+zoomed=$(herdr pane zoom "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.zoom.zoomed')
+panes=$(herdr pane list | jq -c --arg t "$HERDR_ACTIVE_TAB_ID" '[.result.panes[] | select(.tab_id == $t)]')
+mark="⛶ ZOOMED · $(printf '%s' "$panes" | jq -r 'length - 1') HIDDEN"
+if [ "$zoomed" = true ]; then
+  printf '%s' "$panes" |
+    jq -r '.[] | select((.label // "") == "" or ((.label // "") | startswith("⛶ ZOOMED"))) | .pane_id' |
+    while read -r pane; do herdr pane rename "$pane" "$mark"; done
+else
+  printf '%s' "$panes" |
+    jq -r '.[] | select((.label // "") | startswith("⛶ ZOOMED")) | .pane_id' |
+    while read -r pane; do herdr pane rename "$pane" --clear; done
+fi
+exit 0
+'''
+
+[[keys.command]]
+key = "f4"
+type = "shell"
+description = "zoom (marks the pane border)"
+command = '''
+zoomed=$(herdr pane zoom "$HERDR_ACTIVE_PANE_ID" | jq -r '.result.zoom.zoomed')
+panes=$(herdr pane list | jq -c --arg t "$HERDR_ACTIVE_TAB_ID" '[.result.panes[] | select(.tab_id == $t)]')
+mark="⛶ ZOOMED · $(printf '%s' "$panes" | jq -r 'length - 1') HIDDEN"
+if [ "$zoomed" = true ]; then
+  printf '%s' "$panes" |
+    jq -r '.[] | select((.label // "") == "" or ((.label // "") | startswith("⛶ ZOOMED"))) | .pane_id' |
+    while read -r pane; do herdr pane rename "$pane" "$mark"; done
+else
+  printf '%s' "$panes" |
+    jq -r '.[] | select((.label // "") | startswith("⛶ ZOOMED")) | .pane_id' |
+    while read -r pane; do herdr pane rename "$pane" --clear; done
+fi
+exit 0
+'''
 
 # F1: fuzzy MRU Space selector from Herdr Recent Navigator.
 [[keys.command]]
