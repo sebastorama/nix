@@ -301,7 +301,9 @@ in
        co = "checkout";
        dc = "diff --cached";
        df = "diff";
-       lg = "log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset' --abbrev-commit";
+       # --exclude applies to a later --all, keeping T3 Code's per-turn
+       # checkpoint refs (refs/t3/checkpoints/*) out of `git lg --all`.
+       lg = "log --graph --exclude='refs/t3/*' --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%ae>%Creset' --abbrev-commit";
      };
    };
   };
