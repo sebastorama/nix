@@ -10,7 +10,10 @@
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
 
-    herdr.url = "github:ogulcancelik/herdr";
+    herdr = {
+      url = "github:ogulcancelik/herdr";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     herdr-recent-navigator = {
       url = "github:beyondlex/herdr-recent-navigator";
       flake = false;
@@ -129,6 +132,17 @@
         inherit inputs hostname self;
       };
     };
+
+    mkNixosDevSystem = hostname: system: nixpkgs.lib.nixosSystem {
+      modules = [
+        ./hosts/nixos-dev/configuration.nix
+        nixpkgs.nixosModules.readOnlyPkgs
+        { nixpkgs.pkgs = mkPkgs system; }
+      ];
+      specialArgs = {
+        inherit inputs hostname self;
+      };
+    };
   in
   {
     # Darwin configurations
@@ -141,6 +155,7 @@
     nixosConfigurations = {
       "wsl" = mkNixosWslSystem "wsl" "x86_64-linux";
       "nixos-orbstack" = mkOrbstackSystem "nixos-orbstack" "aarch64-linux";
+      "nixos-dev" = mkNixosDevSystem "nixos-dev" "x86_64-linux";
     };
 
     # Home Manager configurations for non-NixOS Linux (standalone WSL distros)
