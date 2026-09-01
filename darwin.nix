@@ -21,6 +21,7 @@
 
     taps = [
       "dopplerhq/cli"
+      "jeffreywildman/virt-manager"
       "modem-dev/tap"
       "qmk/qmk"
       "typewhisper/tap"
@@ -111,6 +112,7 @@
       "gnupg"
       "graphviz"
       "haskell-stack"
+      "jeffreywildman/virt-manager/virt-viewer"
       "modem-dev/tap/hunk"
       "openjdk"
       "sevenzip"
