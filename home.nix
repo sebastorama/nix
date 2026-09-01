@@ -2,7 +2,7 @@
 
 let
   # Detect home directory based on system
-  homeDir = if pkgs.stdenv.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
+  homeDir = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
   dotfilesPath = "${homeDir}/nix/dotfiles";
   nodejsPackage = pkgs.nodejs_26;
   npmGlobalPrefix = "${homeDir}/.npm-packages";
@@ -102,7 +102,7 @@ in
     gnumake
     herdrPackage
   ] ++ pkgs.lib.optionals (
-    pkgs.stdenv.isLinux && pkgs.stdenv.hostPlatform.isx86_64
+    pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86_64
   ) [
     google-chrome
   ] ++ [
@@ -267,7 +267,7 @@ in
   home.activation.installOpenCode = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
     ${npmGlobalEnv}
     export PATH="${nodejsPackage}/bin:$PATH"
-    run ${nodejsPackage}/bin/npm install -g opencode-ai
+    run ${nodejsPackage}/bin/npm install -g --allow-scripts=opencode-ai opencode-ai
   '';
 
   home.activation.installPiPackages = lib.hm.dag.entryAfter [ "installPiCodingAgent" ] ''
@@ -534,7 +534,7 @@ in
       };
     }];
 
-    initContent = lib.optionalString pkgs.stdenv.isDarwin ''
+    initContent = lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
       eval "$(/opt/homebrew/bin/brew shellenv)"
     '' + ''
       [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"

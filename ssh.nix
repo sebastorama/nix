@@ -3,7 +3,7 @@
 {
   programs.ssh = {
     enable = true;
-    includes = lib.optionals pkgs.stdenv.isDarwin [ "~/.orbstack/ssh/config" ];
+    includes = lib.optionals pkgs.stdenv.hostPlatform.isDarwin [ "~/.orbstack/ssh/config" ];
     # Disable deprecated defaults and set ours explicitly
     enableDefaultConfig = false;
     settings = {
