@@ -101,9 +101,7 @@ in
     gh
     gnumake
     herdrPackage
-  ] ++ pkgs.lib.optionals (
-    pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.hostPlatform.isx86_64
-  ) [
+  ] ++ lib.optionals (hostname == "nixos-dev") [
     google-chrome
   ] ++ [
     gum
@@ -240,8 +238,20 @@ in
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL="en_US.UTF-8";
     LANG="en_US.UTF-8";
+  } // lib.optionalAttrs (hostname == "nixos-dev") {
+    BROWSER = "google-chrome-stable";
   } // lib.optionalAttrs (hostname == "nixos-orbstack") {
     PI_CHROME_BRIDGE_HOST = "0.0.0.0";
+  };
+
+  xdg.mimeApps = lib.mkIf (hostname == "nixos-dev") {
+    enable = true;
+    defaultApplications = {
+      "text/html" = [ "google-chrome.desktop" ];
+      "application/xhtml+xml" = [ "google-chrome.desktop" ];
+      "x-scheme-handler/http" = [ "google-chrome.desktop" ];
+      "x-scheme-handler/https" = [ "google-chrome.desktop" ];
+    };
   };
 
   # Installed via npm rather than nixpkgs since it's not packaged there yet.
