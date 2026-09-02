@@ -59,6 +59,28 @@
       enable = true;
       openFirewall = true;
       defaultWindowManager = "xfce4-session";
+      # nixpkgs builds xorgxrdp without glamor, and its DRI3 support only
+      # exists behind that flag. Rebuild it with glamor and allow the VirGL
+      # driver (virtio_gpu) so X clients like Chrome render on the host iGPU.
+      extraConfDirCommands =
+        let
+          stock = pkgs.xrdp.xorgxrdp;
+          xorgxrdp = stock.overrideAttrs (old: {
+            buildInputs = old.buildInputs ++ [
+              pkgs.libepoxy
+              pkgs.libgbm
+            ];
+            configureFlags = (old.configureFlags or [ ]) ++ [ "--enable-glamor" ];
+            postInstall = (old.postInstall or "") + ''
+              sed -i 's/"amdgpu i915 msm radeon"/"amdgpu i915 msm radeon virtio_gpu"/' \
+                $out/etc/X11/xrdp/xorg.conf
+              grep -q virtio_gpu $out/etc/X11/xrdp/xorg.conf
+            '';
+          });
+        in
+        ''
+          substituteInPlace $out/sesman.ini --replace-fail ${stock} ${xorgxrdp}
+        '';
     };
     printing.enable = true;
     pulseaudio.enable = false;
@@ -83,11 +105,22 @@
 
   security.rtkit.enable = true;
 
+  virtualisation = {
+    containers.enable = true;
+    podman = {
+      enable = true;
+      dockerCompat = true;
+      dockerSocket.enable = true;
+      defaultNetwork.settings.dns_enabled = true;
+    };
+  };
+
   users.users.sebastorama = {
     isNormalUser = true;
     description = "Sebastião Giacheto Ferreira Júnior";
     extraGroups = [
       "networkmanager"
+      "podman"
       "wheel"
     ];
     shell = pkgs.zsh;
@@ -105,6 +138,7 @@
 
   environment.systemPackages = with pkgs; [
     curl
+    docker-compose
     ghostty.terminfo
     git
     htop
