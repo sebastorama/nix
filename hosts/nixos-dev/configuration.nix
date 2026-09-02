@@ -102,6 +102,7 @@
 
   environment.systemPackages = with pkgs; [
     curl
+    ghostty.terminfo
     git
     htop
     rsync
