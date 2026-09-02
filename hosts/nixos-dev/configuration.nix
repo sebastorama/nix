@@ -48,7 +48,10 @@
         variant = "alt-intl";
       };
       displayManager.lightdm.enable = true;
-      desktopManager.xfce.enable = true;
+      desktopManager.xfce = {
+        enable = true;
+        enableScreensaver = false;
+      };
     };
 
     qemuGuest.enable = true;
