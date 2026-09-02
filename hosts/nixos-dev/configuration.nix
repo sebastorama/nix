@@ -52,6 +52,11 @@
     };
 
     qemuGuest.enable = true;
+    xrdp = {
+      enable = true;
+      openFirewall = true;
+      defaultWindowManager = "xfce4-session";
+    };
     printing.enable = true;
     pulseaudio.enable = false;
     pipewire = {
