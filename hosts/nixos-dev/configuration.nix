@@ -104,6 +104,7 @@
   };
 
   security.rtkit.enable = true;
+  security.sudo.wheelNeedsPassword = false;
 
   virtualisation = {
     containers.enable = true;
