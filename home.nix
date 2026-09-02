@@ -185,6 +185,16 @@ in
 
     ".npmrc".source = dotfiles/npmrc;
 
+    # us(alt-intl) makes ' a dead acute; the stock compose table turns 'c
+    # into ć, but on this box it should behave like macOS and give ç.
+    ".XCompose" = lib.mkIf (hostname == "nixos-dev") {
+      text = ''
+        include "%L"
+        <dead_acute> <c> : "ç" ccedilla
+        <dead_acute> <C> : "Ç" Ccedilla
+      '';
+    };
+
     ".pi/agent/AGENTS.md".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/pi/AGENTS.md";
 
