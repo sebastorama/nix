@@ -69,6 +69,7 @@
       "mattermost"
       "microsoft-edge"
       "microsoft-office"
+      "moonlight"
       "ngrok"
       "nordvpn"
       "notion"
