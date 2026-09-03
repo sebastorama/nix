@@ -12,7 +12,6 @@
       device = "/dev/sda";
       useOSProber = true;
     };
-    kernelModules = [ "virtio_gpu" ];
   };
 
   networking = {
@@ -72,37 +71,15 @@
       # on the systemd user bus; give RDP logins their own bus so a second
       # xfce4-session can start.
       defaultWindowManager = "${pkgs.dbus}/bin/dbus-run-session xfce4-session";
-      # nixpkgs builds xorgxrdp without glamor, and its DRI3 support only
-      # exists behind that flag. Rebuild it with glamor and allow the VirGL
-      # driver (virtio_gpu) so X clients like Chrome render on the host iGPU.
-      extraConfDirCommands =
-        let
-          stock = pkgs.xrdp.xorgxrdp;
-          xorgxrdp = stock.overrideAttrs (old: {
-            buildInputs = old.buildInputs ++ [
-              pkgs.libepoxy
-              pkgs.libgbm
-            ];
-            configureFlags = (old.configureFlags or [ ]) ++ [ "--enable-glamor" ];
-            postInstall = (old.postInstall or "") + ''
-              sed -i 's/"amdgpu i915 msm radeon"/"amdgpu i915 msm radeon virtio_gpu"/' \
-                $out/etc/X11/xrdp/xorg.conf
-              grep -q virtio_gpu $out/etc/X11/xrdp/xorg.conf
-            '';
-          });
-        in
-        ''
-          substituteInPlace $out/sesman.ini --replace-fail ${stock} ${xorgxrdp}
-        '';
     };
     sunshine = {
       enable = true;
       openFirewall = true;
-      # virtio-gpu has no KMS cursor plane, so KMS capture would stream an
-      # invisible pointer; X11 capture composites the cursor via XFixes.
+      # KMS capture would stream an invisible pointer on the virtual display;
+      # X11 capture composites the cursor via XFixes.
       settings.capture = "x11";
-      # virtio-gpu accepts arbitrary modes, so resize the virtual display to
-      # whatever Moonlight asks for instead of upscaling 1280x800.
+      # The virtual display accepts arbitrary modes, so resize it to whatever
+      # Moonlight asks for instead of upscaling 1280x800.
       applications.apps = [
         {
           name = "Desktop";
