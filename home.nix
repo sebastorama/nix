@@ -5,6 +5,7 @@ let
   homeDir = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
   dotfilesPath = "${homeDir}/nix/dotfiles";
   nodejsPackage = pkgs.nodejs_26;
+  isNixosDesktop = builtins.elem hostname [ "nixos-dev" "nixos-sapb1" ];
   npmGlobalPrefix = "${homeDir}/.npm-packages";
   npmGlobalEnv = ''
     export NPM_CONFIG_PREFIX="${npmGlobalPrefix}"
@@ -101,7 +102,7 @@ in
     gh
     gnumake
     herdrPackage
-  ] ++ lib.optionals (hostname == "nixos-dev") [
+  ] ++ lib.optionals isNixosDesktop [
     google-chrome
   ] ++ [
     gum
@@ -187,7 +188,7 @@ in
 
     # us(alt-intl) makes ' a dead acute; the stock compose table turns 'c
     # into ć, but on this box it should behave like macOS and give ç.
-    ".XCompose" = lib.mkIf (hostname == "nixos-dev") {
+    ".XCompose" = lib.mkIf isNixosDesktop {
       text = ''
         include "%L"
         <dead_acute> <c> : "ç" ccedilla
@@ -248,13 +249,13 @@ in
     LC_CTYPE = "en_US.UTF-8";
     LC_ALL="en_US.UTF-8";
     LANG="en_US.UTF-8";
-  } // lib.optionalAttrs (hostname == "nixos-dev") {
+  } // lib.optionalAttrs isNixosDesktop {
     BROWSER = "google-chrome-stable";
   } // lib.optionalAttrs (hostname == "nixos-orbstack") {
     PI_CHROME_BRIDGE_HOST = "0.0.0.0";
   };
 
-  xdg.mimeApps = lib.mkIf (hostname == "nixos-dev") {
+  xdg.mimeApps = lib.mkIf isNixosDesktop {
     enable = true;
     defaultApplications = {
       "text/html" = [ "google-chrome.desktop" ];
