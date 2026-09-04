@@ -559,6 +559,13 @@ in
       eval "$(/opt/homebrew/bin/brew shellenv)"
     '' + ''
       [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
+    '' + ''
+      # fino's prompt char flags a git repo ("±") or not ("○"); show the host
+      # OS in orange instead, so Linux boxes read differently from the Darwin
+      # ones at a glance. The corner lines stay white.
+      function prompt_char {
+        print -n "''${FG[208]}${if pkgs.stdenv.hostPlatform.isDarwin then "" else ""}"
+      }
     '';
   };
 
