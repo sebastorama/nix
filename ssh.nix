@@ -14,6 +14,10 @@
         hostname = "100.92.56.95";
         user = "sebastorama";
       };
+      "nixos-dev01" = {
+        hostname = "100.127.18.101";
+        user = "sebastorama";
+      };
     };
   };
 }
