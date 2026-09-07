@@ -62,6 +62,7 @@ in
 {
   imports = [
     ./ssh.nix
+    (import ./zsh.nix { inherit nodejsPackage; })
   ];
 
   # Home Manager needs a bit of information about you and the paths it should
@@ -487,85 +488,6 @@ in
       if [ -f "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh" ]; then
         . "$HOME/.nix-profile/etc/profile.d/hm-session-vars.sh"
       fi
-    '';
-  };
-
-  programs.direnv = {
-    enable = true;
-    enableBashIntegration = true;
-    enableZshIntegration = true;
-    nix-direnv.enable = true;
-  };
-
-  programs.zoxide = {
-    enable = true;
-    enableZshIntegration = true;
-  };
-
-  programs.zsh = {
-    enable = true;
-
-    envExtra = ''
-      export LANG=en_US.UTF-8
-      export LC_ALL=en_US.UTF-8
-      export LC_CTYPE=en_US.UTF-8
-    '';
-
-    oh-my-zsh = {
-      enable = true;
-      theme = "fino";
-      plugins = [
-        "git"
-        "npm"
-        "history"
-        "node"
-        "rust"
-      ];
-    };
-
-    shellAliases = {
-      ta = "tmux new-session -As";
-      ls = "lsd";
-      wmm = "nvim '${homeDir}/obsidian/Main/Working Memory.md'";
-      # Coding agents always run with the system node, even when nix-direnv
-      # puts a project-specific node first in PATH.
-      claude = ''PATH="${nodejsPackage}/bin:$PATH" claude'';
-      codex = ''PATH="${nodejsPackage}/bin:$PATH" codex'';
-      pi = ''PATH="${nodejsPackage}/bin:$PATH" pi'';
-      ccc = "claude --dangerously-skip-permissions";
-      ccx = "claude --settings ${homeDir}/.config/claude/gpt-proxy.json --dangerously-skip-permissions";
-    };
-
-    autosuggestion = {
-      enable = true;
-      highlight = "fg=#666666,bold";
-    };
-
-    history.ignoreAllDups = true;
-
-    autocd = true;
-
-    plugins = [{
-      name = "zsh-fzf-history-search";
-      src = pkgs.fetchFromGitHub {
-        owner = "joshskidmore";
-        repo = "zsh-fzf-history-search";
-        rev = "d5a9730b5b4cb0b39959f7f1044f9c52743832ba";
-        sha256 = "tQqIlkgIWPEdomofPlmWNEz/oNFA1qasILk4R5RWobY=";
-      };
-    }];
-
-    initContent = lib.optionalString pkgs.stdenv.hostPlatform.isDarwin ''
-      eval "$(/opt/homebrew/bin/brew shellenv)"
-    '' + ''
-      [ -f "$HOME/.secrets" ] && source "$HOME/.secrets"
-    '' + ''
-      # fino's prompt char flags a git repo ("±") or not ("○"); show the host
-      # OS in orange instead, so Linux boxes read differently from the Darwin
-      # ones at a glance. The corner lines stay white.
-      function prompt_char {
-        print -n "''${FG[208]}${if pkgs.stdenv.hostPlatform.isDarwin then "" else ""}"
-      }
     '';
   };
 
