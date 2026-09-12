@@ -5,7 +5,7 @@ let
   homeDir = if pkgs.stdenv.hostPlatform.isDarwin then "/Users/sebastorama" else "/home/sebastorama";
   dotfilesPath = "${homeDir}/nix/dotfiles";
   nodejsPackage = pkgs.nodejs_26;
-  isNixosDesktop = builtins.elem hostname [ "nixos-dev" "nixos-sapb1" ];
+  isNixosDesktop = hostname == "nixos-dev";
   npmGlobalPrefix = "${homeDir}/.npm-packages";
   npmGlobalEnv = ''
     export NPM_CONFIG_PREFIX="${npmGlobalPrefix}"

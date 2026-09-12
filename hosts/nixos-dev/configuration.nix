@@ -16,7 +16,25 @@
 
   networking = {
     hostName = hostname;
-    networkmanager.enable = true;
+    hosts."192.168.183.200" = [ "pve" ];
+    networkmanager = {
+      enable = true;
+      ensureProfiles.profiles.ens18 = {
+        connection = {
+          id = "Wired connection 1";
+          uuid = "526dfb3f-d590-3d78-93b4-9971a26f856f";
+          type = "ethernet";
+          interface-name = "ens18";
+          autoconnect = true;
+        };
+        ipv4 = {
+          method = "manual";
+          address1 = "192.168.183.201/24,192.168.183.1";
+          dns = "192.168.183.1;";
+        };
+        ipv6.method = "auto";
+      };
+    };
   };
 
   time.timeZone = "America/Porto_Velho";

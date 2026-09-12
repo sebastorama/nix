@@ -156,7 +156,6 @@
       "wsl" = mkNixosWslSystem "wsl" "x86_64-linux";
       "nixos-orbstack" = mkOrbstackSystem "nixos-orbstack" "aarch64-linux";
       "nixos-dev" = mkNixosSystem "nixos-dev" "x86_64-linux" ./hosts/nixos-dev/configuration.nix;
-      "nixos-sapb1" = mkNixosSystem "nixos-sapb1" "x86_64-linux" ./hosts/nixos-dev/configuration.nix;
     };
 
     # Home Manager configurations for non-NixOS Linux (standalone WSL distros)
