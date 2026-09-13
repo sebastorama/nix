@@ -113,21 +113,28 @@
   security.sudo.wheelNeedsPassword = false;
 
   virtualisation = {
-    containers.enable = true;
-    podman = {
-      enable = true;
-      dockerCompat = true;
-      dockerSocket.enable = true;
-      defaultNetwork.settings.dns_enabled = true;
+    docker.enable = true;
+    oci-containers = {
+      backend = "docker";
+      containers.portainer = {
+        image = "portainer/portainer-ce:lts";
+        ports = [ "9443:9443" ];
+        volumes = [
+          "/var/run/docker.sock:/var/run/docker.sock"
+          "portainer_data:/data"
+        ];
+      };
     };
   };
+
+  networking.firewall.allowedTCPPorts = [ 9443 ];
 
   users.users.sebastorama = {
     isNormalUser = true;
     description = "Sebastião Giacheto Ferreira Júnior";
     extraGroups = [
       "networkmanager"
-      "podman"
+      "docker"
       "uinput"
       "wheel"
     ];
