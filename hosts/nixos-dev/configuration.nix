@@ -1,4 +1,4 @@
-{ inputs, hostname, pkgs, ... }:
+{ inputs, hostname, lib, pkgs, ... }:
 
 {
   imports = [
@@ -127,7 +127,34 @@
     };
   };
 
-  networking.firewall.allowedTCPPorts = [ 9443 ];
+  # VS Code web UI, reverse-proxied as codenix.s77.io by the homelab Caddy
+  # host. No connection token: the proxy is only reachable over the tailnet.
+  systemd.services.code-serve-web = {
+    description = "VS Code web UI (code serve-web) on :8081";
+    wantedBy = [ "multi-user.target" ];
+    wants = [ "network-online.target" ];
+    after = [ "network-online.target" ];
+    # The wrapper script shells out via `env sh`, and terminals inside VS Code
+    # inherit this PATH, so expose the whole system profile.
+    path = [ "/run/current-system/sw" ];
+    serviceConfig = {
+      User = "sebastorama";
+      Group = "users";
+      WorkingDirectory = "/home/sebastorama";
+      ExecStart = lib.concatStringsSep " " [
+        "${pkgs.vscode}/bin/code serve-web"
+        "--host 0.0.0.0"
+        "--port 8081"
+        "--without-connection-token"
+        "--accept-server-license-terms"
+        "--disable-telemetry"
+      ];
+      Restart = "always";
+      RestartSec = 5;
+    };
+  };
+
+  networking.firewall.allowedTCPPorts = [ 8081 9443 ];
 
   users.users.sebastorama = {
     isNormalUser = true;
