@@ -263,9 +263,39 @@ in
       precmd_functions=(''${precmd_functions:#_zsh_autosuggest_start})
       source ${zshPrepared}/autosuggest-bindings.zsh
 
-      # fino's layout and colors, using prompt escapes without subprocesses.
+      # Refresh the branch and status before each prompt.
       unsetopt prompt_subst
-      PROMPT=$'%F{white}╭─%F{40}%n %F{239}at %F{33}%m %F{239}in %B%F{226}%~%b%f\n%F{white}╰─%F{208}${if pkgs.stdenv.hostPlatform.isDarwin then "" else ""}%f '
+      _update_git_prompt() {
+        local branch git_status entry git_prompt="" staged="" unstaged=""
+        branch=$(command git symbolic-ref --quiet --short HEAD 2>/dev/null) ||
+          branch=$(command git rev-parse --short HEAD 2>/dev/null) || branch=""
+        if [[ -n $branch ]]; then
+          # Escape percent signs so branch names cannot introduce prompt escapes.
+          git_prompt=" %F{239}(%F{magenta}''${branch//\%/%%}%f"
+          # Porcelain's first two columns describe the index and working tree.
+          # Avoid taking Git's optional index lock just to draw the prompt.
+          if git_status=$(GIT_OPTIONAL_LOCKS=0 command git status --porcelain=v1 --untracked-files=normal 2>/dev/null); then
+            for entry in "''${(@f)git_status}"; do
+              [[ -z $entry ]] && continue
+              if [[ ''${entry[1,2]} == '??' ]]; then
+                unstaged="%F{yellow}!%f"
+              else
+                [[ ''${entry[1]} != ' ' ]] && staged="%F{green}+%f"
+                [[ ''${entry[2]} != ' ' ]] && unstaged="%F{yellow}!%f"
+              fi
+            done
+            if [[ -n $staged$unstaged ]]; then
+              git_prompt+=" $staged$unstaged"
+            else
+              git_prompt+=" %F{green}✓%f"
+            fi
+          fi
+          git_prompt+="%F{239})%f"
+        fi
+        PROMPT=$'%F{40}%n%F{239}@%F{${if pkgs.stdenv.hostPlatform.isLinux then "208" else "33"}}%m%F{239}:%B%F{226}%~%b%f'"$git_prompt"$'\n# '
+      }
+      autoload -Uz add-zsh-hook
+      add-zsh-hook precmd _update_git_prompt
       RPROMPT=""
     '';
   };
