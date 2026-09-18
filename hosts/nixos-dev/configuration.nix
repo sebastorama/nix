@@ -11,6 +11,8 @@
     hosts."192.168.183.200" = [ "pve" ];
     networkmanager = {
       enable = true;
+      # Wait for the declarative profile instead of creating a DHCP fallback.
+      settings.main.no-auto-default = "*";
       ensureProfiles.profiles.ens18 = {
         connection = {
           id = "Wired connection 1";
