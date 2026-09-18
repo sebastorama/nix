@@ -149,6 +149,12 @@ in
       text = builtins.readFile ./scripts/herdr-forward.sh;
     })
 
+    (pkgs.writeShellApplication {
+      name = "pr-review";
+      runtimeInputs = [ git gh coreutils findutils ];
+      text = builtins.readFile ./scripts/pr-review.sh;
+    })
+
     (pkgs.writeShellScriptBin "only_numbers" ''
       sed 's/[^0-9]//g'
     '')
