@@ -128,3 +128,18 @@ See the [NixOS installation manual](https://nixos.org/manual/nixos/stable/#sec-i
 for the BIOS and UEFI installation layouts.
 
 ## Commands
+
+### Herdr with automatic SSH port forwarding
+
+Home Manager installs `herdr-forward` from `scripts/herdr-forward.sh`:
+
+```sh
+herdr-forward nixos-dev --remote-keybindings server
+```
+
+Requires SSH key authentication and `ss` on the remote host. Every three seconds,
+loopback/wildcard TCP listeners on ports 1024–65535 are forwarded to the same
+port on local `127.0.0.1` (including databases, not just web servers). Occupied
+local ports are skipped and retried. Tunnels stop when Herdr exits or detaches.
+Logs are stored under `${XDG_STATE_HOME:-~/.local/state}/herdr-forward/`.
+If the forwarding SSH connection drops, restart the command to reconnect.

@@ -1,6 +1,6 @@
 onboarding = false
 [theme]
-name = "dracula"
+name = "gruvbox"
 auto_switch = false
 
 [ui]
@@ -28,6 +28,7 @@ tab_bar_right = [{ type = "zoom" }]
 # focus, prefix+z zoom, prefix+[ copy mode with v/y selection, mouse support.
 agent_panel_sort = "priority"
 show_agent_labels_on_pane_borders = false
+status_indicators = "symbols"
 [keys]
 # Switch workspaces directly with the standard macOS tab-navigation chords.
 previous_workspace = ["cmd+shift+["]

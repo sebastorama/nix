@@ -20,6 +20,7 @@
     enable = true;
 
     taps = [
+      "dimentium/autoraise"
       "dopplerhq/cli"
       "jeffreywildman/virt-manager"
       "modem-dev/tap"
@@ -107,6 +108,10 @@
     ];
 
     brews = [
+      {
+        name = "autoraise";
+        start_service = true;
+      }
       "cliproxyapi"
       "cloudflared"
       "findutils"

@@ -143,6 +143,12 @@ in
     yt-dlp
 
     # Custom scripts
+    (pkgs.writeShellApplication {
+      name = "herdr-forward";
+      runtimeInputs = [ herdrPackage openssh coreutils gawk gnugrep ];
+      text = builtins.readFile ./scripts/herdr-forward.sh;
+    })
+
     (pkgs.writeShellScriptBin "only_numbers" ''
       sed 's/[^0-9]//g'
     '')
