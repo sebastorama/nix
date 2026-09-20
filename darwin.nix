@@ -119,7 +119,6 @@
       "graphviz"
       "haskell-stack"
       "jeffreywildman/virt-manager/virt-viewer"
-      "modem-dev/tap/hunk"
       "openjdk"
       "sevenzip"
       "terminal-notifier"

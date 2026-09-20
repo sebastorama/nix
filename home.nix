@@ -103,6 +103,7 @@ in
     gh
     gnumake
     herdrPackage
+    hunk
   ] ++ lib.optionals isNixosDesktop [
     google-chrome
   ] ++ [

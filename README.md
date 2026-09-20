@@ -129,6 +129,15 @@ for the BIOS and UEFI installation layouts.
 
 ## Commands
 
+### Hunk
+
+Home Manager installs Hunk on Linux and macOS through Nix. Apply your usual
+system or Home Manager rebuild to install it. Its configuration is linked to
+`dotfiles/hunk_config.toml`.
+
+On macOS, after rebuilding, remove the previous Homebrew installation with
+`brew uninstall modem-dev/tap/hunk`.
+
 ### Herdr with automatic SSH port forwarding
 
 Home Manager installs `herdr-forward` from `scripts/herdr-forward.sh`:
