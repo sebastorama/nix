@@ -4,10 +4,10 @@ window-padding-color = background
 window-padding-x = 10
 window-padding-y = 0,10
 window-padding-balance = true
-font-size = 15
+font-size = 14
 font-family = "JetBrainsMono Nerd Font Mono"
 font-style = Light
-adjust-cell-height = 12%
+adjust-cell-height = 14%
 
 # Let Herdr handle workspace navigation.
 keybind = cmd+shift+[=unbind
