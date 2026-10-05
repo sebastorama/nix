@@ -167,6 +167,8 @@ in
       pi = ''PATH="${nodejsPackage}/bin:$PATH" pi'';
       ccc = "claude --dangerously-skip-permissions";
       ccx = "claude --settings ${homeDir}/.config/claude/gpt-proxy.json --dangerously-skip-permissions";
+    } // lib.optionalAttrs pkgs.stdenv.hostPlatform.isDarwin {
+      co = "code --remote ssh-remote+sebastorama@nixos-dev";
     };
 
     autosuggestion = {
