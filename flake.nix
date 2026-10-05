@@ -27,6 +27,11 @@
       flake = false;
     };
 
+    mattpocock-skills = {
+      url = "github:mattpocock/skills";
+      flake = false;
+    };
+
     neovim-nightly-overlay.url = "github:nix-community/neovim-nightly-overlay";
 
     nixos-wsl.url = "github:nix-community/nixos-wsl";
