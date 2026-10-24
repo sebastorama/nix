@@ -217,6 +217,9 @@ in
     ".config/opencode/AGENTS.md".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/pi/AGENTS.md";
 
+    ".codex/AGENTS.md".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/pi/AGENTS.md";
+
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 

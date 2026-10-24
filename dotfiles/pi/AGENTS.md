@@ -24,6 +24,7 @@ When uncertain, prefer: Tailwind v4, TypeScript, pnpm, React, Convex, Clerk.
 ## General preferences
 - If asked to do too much work at once, stop and state that clearly.
 - If computer use is helpful for completing or verifying work, shell out to gpt-5.6-sol with Codex for it.
+- For computer use or browser automation, always use Google Chrome. Do not use Zen Browser, also when it is the default browser. To open a URL, use `open -a "Google Chrome" <url>`.
 
 ## Worktrees
 
