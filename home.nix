@@ -42,20 +42,20 @@ let
         --replace-fail 'alt+l' 'ctrl+l'
     '';
   };
-  herdrBar = pkgs.stdenvNoCC.mkDerivation rec {
+  herdrBar = pkgs.rustPlatform.buildRustPackage rec {
     pname = "herdr-bar";
     src = inputs.herdr-bar;
-    version = (builtins.fromTOML (builtins.readFile "${src}/herdr-plugin.toml")).version;
+    version = (builtins.fromTOML (builtins.readFile "${src}/Cargo.toml")).package.version;
 
-    dontBuild = true;
+    cargoLock.lockFile = "${src}/Cargo.lock";
 
-    installPhase = ''
-      runHook preInstall
-      mkdir -p "$out"
-      cp -R . "$out"
+    # The test suite reads process ages from /proc, which the Nix sandbox hides.
+    doCheck = false;
+
+    postInstall = ''
+      cp herdr-plugin.toml "$out/herdr-plugin.toml"
       substituteInPlace "$out/herdr-plugin.toml" \
-        --replace-fail 'command = ["python3", "run.py"]' 'command = ["${pkgs.python3}/bin/python3", "run.py"]'
-      runHook postInstall
+        --replace-fail 'bin/herdr-bar' './bin/herdr-bar'
     '';
   };
 in
@@ -125,7 +125,7 @@ in
     postgresql_18
     python3
     ripgrep
-    (ruby_3_3.withPackages (rp: with rp; [
+    (ruby_3_4.withPackages (rp: with rp; [
       bundler
       pry
     ]))
