@@ -212,6 +212,17 @@ in
       '';
     };
 
+    # services.dropbox runs the daemon with HOME=~/.dropbox-hm. Its start
+    # script tries to symlink the real paths but silently fails (it calls the
+    # activation-only `run` helper), so declare the links here. The account is
+    # a Dropbox Business team, so the sync root is named after the team.
+    ".dropbox" = lib.mkIf isNixosDesktop {
+      source = config.lib.file.mkOutOfStoreSymlink "${homeDir}/.dropbox-hm/.dropbox";
+    };
+    "Dropbox" = lib.mkIf isNixosDesktop {
+      source = config.lib.file.mkOutOfStoreSymlink "${homeDir}/.dropbox-hm/Giacheto Agropec Dropbox";
+    };
+
     ".pi/agent/AGENTS.md".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/pi/AGENTS.md";
 
@@ -282,6 +293,12 @@ in
       "x-scheme-handler/http" = [ "google-chrome.desktop" ];
       "x-scheme-handler/https" = [ "google-chrome.desktop" ];
     };
+  };
+
+  # Official Dropbox daemon as a user service. First start prints a link in
+  # `journalctl --user -u dropbox` to connect the account.
+  services.dropbox = lib.mkIf isNixosDesktop {
+    enable = true;
   };
 
   # Installed via npm rather than nixpkgs since it's not packaged there yet.
