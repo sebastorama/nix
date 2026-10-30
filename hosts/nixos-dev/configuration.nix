@@ -3,6 +3,7 @@
 {
   imports = [
     ./hardware-configuration.nix
+    ./nix-ld.nix
     inputs.home-manager.nixosModules.home-manager
   ];
 
@@ -176,7 +177,6 @@
 
   programs = {
     firefox.enable = true;
-    nix-ld.enable = true;
     zsh.enable = true;
   };
 
