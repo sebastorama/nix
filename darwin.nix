@@ -82,6 +82,7 @@
       "orion"
       "parsec"
       "parallels"
+      "proton-mail-bridge"
       "qbittorrent"
       "qmk-toolbox"
       "raycast"
@@ -108,10 +109,7 @@
     ];
 
     brews = [
-      {
-        name = "autoraise";
-        start_service = true;
-      }
+      "autoraise"
       "cliproxyapi"
       "cloudflared"
       "findutils"
@@ -152,7 +150,7 @@
   ];
 
   system.defaults.dock = {
-    autohide = true;
+    autohide = false;
     tilesize = 44;
     largesize = 96;
     magnification = false;
