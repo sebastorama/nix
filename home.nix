@@ -63,6 +63,7 @@ in
   imports = [
     ./ssh.nix
     ./agent-skills.nix
+    ./doc-renamer
     (import ./zsh.nix { inherit nodejsPackage; })
   ];
 
