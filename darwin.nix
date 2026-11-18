@@ -122,7 +122,7 @@
       "terminal-notifier"
     ];
 
-    onActivation.autoUpdate = true;
+    onActivation.autoUpdate = false;
     onActivation.upgrade = true;
   };
 
