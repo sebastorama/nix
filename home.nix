@@ -91,7 +91,6 @@ in
     btop
     bun
     cargo
-    claude-code
     copilot-language-server
     devcontainer
     doppler
