@@ -1,7 +1,7 @@
 # Matt Pocock's agent skills (github:mattpocock/skills) for Claude Code,
-# Codex and pi. The repo is a plain tree of skills/<group>/<name>/SKILL.md;
-# this module flattens it to <name>/, renames each skill to mp-<name> in
-# its frontmatter, and links it where each tool looks.
+# Codex, pi and Antigravity. The repo is a plain tree of
+# skills/<group>/<name>/SKILL.md; this module flattens it to <name>/, renames
+# each skill to mp-<name> in its frontmatter, and links it where each tool looks.
 { config, lib, pkgs, inputs, ... }:
 
 let
@@ -29,6 +29,14 @@ in
 {
   # Codex and pi both discover skills here.
   home.file.".agents/skills".source = skills;
+
+  # Antigravity (App, CLI, IDE, ACP) discovers global skills here. Keep the
+  # directory itself writable (recursive = true) so user-added skills can live
+  # alongside the Nix-managed ones.
+  home.file.".gemini/config/skills" = {
+    source = skills;
+    recursive = true;
+  };
 
   # Claude Code only reads ~/.claude/skills, and ~/.claude is an out-of-store
   # symlink into dotfiles/claude, so home.file cannot nest entries under it.
