@@ -231,6 +231,9 @@ in
     ".codex/AGENTS.md".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/pi/AGENTS.md";
 
+    ".gemini/config/GEMINI.md".source =
+      config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/antigravity/GEMINI.md";
+
     ".config/crush/crush.json".source =
       config.lib.file.mkOutOfStoreSymlink "${dotfilesPath}/crush.json";
 
@@ -332,6 +335,16 @@ in
     run "${npmGlobalPrefix}/bin/pi" install npm:pi-web-access
     run "${npmGlobalPrefix}/bin/pi" install npm:pi-chrome
     run "${npmGlobalPrefix}/bin/pi" install npm:pi-ask-user
+  '';
+
+  # T3 Code runs Antigravity with an isolated GEMINI_HOME per account
+  # (~/.t3/userdata/providers/antigravity/<hash>), so link GEMINI.md into any
+  # existing profile config dir alongside its skills symlink.
+  home.activation.linkT3AntigravityGeminiMd = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    for dir in "${homeDir}/.t3/userdata/providers/antigravity"/*/config; do
+      [ -d "$dir" ] || continue
+      run ln -sfn "${homeDir}/.gemini/config/GEMINI.md" "$dir/GEMINI.md"
+    done
   '';
 
   programs.neovim.enable = true;
